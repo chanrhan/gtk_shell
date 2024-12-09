@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/chan/Desktop/학교/3_2/시스템프로그래밍/termProject/app/src/view",
+      "program": "/Users/chan/Desktop/학교/3_2/시스템프로그래밍/termProject/app/src/view/build/Debug/outDebug"
+    }
+  ]
+}
