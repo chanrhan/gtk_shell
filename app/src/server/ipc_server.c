@@ -1,9 +1,27 @@
 #include "ipc_server.h"
-
+#include <sys/msg.h>
 
 int send_to_view(res_msg_t* res){
     res->mtype=1;
     printf("Send status: %d\n", res->status);
+    printf("Send byte: %d\n", sizeof(res_msg_t));
+
+    // int msqid = 3407872; // 메시지 큐 ID를 여기에 설정
+    // struct msqid_ds buf;
+    // // struct msginfo* minfo;
+    // // printf("msgmax:%d\n",minfo->msgmax);
+
+    // // msgctl로 메시지 큐 상태 가져오기
+    // if (msgctl(msqid, IPC_STAT, &buf) == -1) {
+    //     perror("msgctl");
+    //     return 1;
+    // }
+
+    // // 메시지 큐 상태 출력
+    // printf("Current bytes in queue: %lu\n", buf.msg_cbytes); // 현재 사용된 바이트
+    // printf("Number of messages: %lu\n", buf.msg_qnum);          // 메시지 수
+    // printf("Maximum bytes allowed: %lu\n", buf.msg_qbytes);    // 최대 바이트 수
+
     if((msgsnd(res_msg_q_id, res, sizeof(res_msg_t), IPC_NOWAIT)) == -1){
         perror("msgsnd");
         return 1;

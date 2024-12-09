@@ -1,0 +1,29 @@
+{
+  "configurations": [
+      {
+          "name": "macos-clang-arm64",
+          "includePath": [
+              "${workspaceFolder}/**",
+              "/opt/homebrew/include/gtk-3.0/**",
+              // "/opt/homebrew/include/glib-2.0/**",
+              "/opt/homebrew/lib/gtk-3.0/**",
+              // "/opt/homebrew/lib/glib-2.0/**",
+              "/opt/homebrew/Cellar/**",
+              "/opt/homebrew/Cellar/gtk+3/3.24.43/include/gtk-3.0"
+              // "/opt/homebrew/Cellar/glib/2.82.2/include/glib-2.0"
+          ],
+          "compilerPath": "/usr/bin/clang ",
+          "cStandard": "${default}",
+          "cppStandard": "${default}",
+          "intelliSenseMode": "macos-clang-arm64",
+          "compilerArgs": [
+              "-L/opt/homebrew/lib",
+              // "-L/opt/homebrew/Cellar",
+              // "-L/opt/homebrew/include",/
+              "-lgtk-3"
+              // "-lglib-2.0"
+          ]
+      }
+  ],
+  "version": 4
+}

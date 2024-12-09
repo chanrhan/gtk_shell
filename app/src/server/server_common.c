@@ -43,7 +43,7 @@ struct tm* gettime(time_t timestamp){
 char* gettime_str(time_t timestamp){
 	struct tm* tmp;
 	tmp = localtime(&timestamp);
-	char* str = (char*)malloc(32);
-	sprintf(str, "%.2d %.2d %.2d:%.2d", tmp->tm_mon+1, tmp->tm_mday, tmp->tm_hour, tmp->tm_min);
+	char* str = (char*)malloc(9);
+	sprintf(str, "%.2d%.2d%.2d%.2d", tmp->tm_mon+1, tmp->tm_mday, tmp->tm_hour, tmp->tm_min);
 	return str;
 }

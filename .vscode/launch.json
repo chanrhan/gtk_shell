@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "lldb",
+      "request": "launch",
+      "args": [],
+      "cwd": "/Users/chan/gtk_shell/app/src/view",
+      "program": "/Users/chan/gtk_shell/app/src/view/build/Debug/outDebug"
+    }
+  ]
+}

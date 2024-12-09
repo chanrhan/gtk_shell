@@ -35,10 +35,15 @@
 
 #define ARG_SIZE 16
 
+// error code
+#define FILE_ALREADY_EXIST 414
+
+// extern long SYSTEM_MSGMAX;
+
 typedef struct file_info_t{
     int type;
     char name[16];
-    char atime[12];
+    char mtime[9];
     int size;
 } file_info_t;
 

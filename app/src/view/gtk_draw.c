@@ -5,14 +5,13 @@ void update_directory(res_msg_t res){
     for(int i=0;i<res.data.file_len;++i){
         file_list[i] = res.data.files[i];
     }
-
     char* text;
     int i=0;
 
     while(i < res.data.file_len){
-        // printf("file[%d]: %s %d %s %d\n", i, file_list[i].name, file_list[i].type, file_list[i].atime, file_list[i].size);
-        text = (char*)malloc(32);
-        snprintf(text, 32, "%s\t\t\t\t\t\t\t %d\t %s\t %d", file_list[i].name, file_list[i].type, file_list[i].atime, file_list[i].size);
+        printf("[%d]: %s|%d|%s|%d|\n", i, file_list[i].name, file_list[i].type, file_list[i].mtime, file_list[i].size);
+        text = (char*)malloc(64);
+        snprintf(text, 64, "%s\t\t\t\t\t\t\t %d\t %s\t %d", file_list[i].name, file_list[i].type, file_list[i].mtime, file_list[i].size);
         gtk_label_set_text(GTK_LABEL(label_data[i]), text);
         ++i;
     }

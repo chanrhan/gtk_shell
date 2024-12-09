@@ -1,7 +1,7 @@
 #include "view_func.h"
 
 int move_directory(char* append){
-    // printf("cwd: %s\n", cwd);
+    printf("move cwd: %s\n", cwd);
 
     req_msg_t req;
     res_msg_t res;
@@ -11,7 +11,8 @@ int move_directory(char* append){
     }else{
         req.args[0][0] = '\0';
     }
-    if(send_wait_rcv(&req, &res) != 0){
+    send_wait_rcv(&req, &res);
+    if(res.status != 0){
         return 1;
     }
     printf("move: %s [%d] success!\n", cwd, res.data.file_len);
@@ -64,14 +65,9 @@ int g_callback_mkdir_popup_submit(GtkWidget* widget, gpointer data){
         gtk_label_set_text(mkdir_modal.inp_error_label, "invalid filename");
         return TRUE;
     }
-
-    int bit = 0;
     for(int i=0;i<9;++i){
         if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(mkdir_modal.perm_check_box[i]))){
-            bit |= (1 << (i+1)%3);
-        }
-        if((i+1)%3 == 0){
-            perm += bit * pow(10, i/3);
+            perm |= (1 << i);
         }
     }
 
@@ -123,6 +119,7 @@ int g_callback_mkdir_popup_submit(GtkWidget* widget, gpointer data){
 }
 
 gboolean on_realize(gpointer data){
+    printf("realize\n");
     move_directory(NULL);
     return FALSE;
 }

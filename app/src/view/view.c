@@ -7,7 +7,6 @@ GtkWidget* dir_text;
 
 int main(int argc, char** argv){
     printf("START VIEW\n");
-
     req_msg_q_id = create_msg_q("keyfile", 1);
     res_msg_q_id = create_msg_q("keyfile", 2);
     gtk_init(&argc, &argv);

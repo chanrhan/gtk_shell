@@ -54,7 +54,7 @@ void get_ls(char *pwd, msg_data_t *data)
 
         data->files[i].type = (int)dent->d_type;
         strncpy(data->files[i].name, dent->d_name, 16);
-        strncpy(data->files[i].atime, gettime_str(statbuf.st_atime), 12);
+        strncpy(data->files[i].mtime, gettime_str(statbuf.st_mtime), 9);
         data->files[i].size = statbuf.st_size;
 
         ++i;
@@ -80,10 +80,10 @@ int validate_path(char *org_cwd, char *append, char* cwd, int mode)
                 strncpy(cwd, org_cwd, CWD_LEN);
                 return 1;
             }
-            printf("cwd:%s\n", cwd);
+            // printf("cwd:%s\n", cwd);
             char* last_slash = strrchr(cwd, '/');
             *last_slash = '\0';
-            printf("cwd:%s\n", cwd);
+            // printf("cwd:%s\n", cwd);
         }
         else
         {
@@ -128,9 +128,11 @@ int cmd_mkdir(req_msg_t req, res_msg_t *res)
     }
 
     printf("validate cwd:%s\n", cwd);
-    int ret = mkdir(cwd, (mode_t)atoi(req.args[1]));
+    int ret = mkdir(cwd, atoi(req.args[1]));
     if(ret != 0){
-        // strncpy(res->ERROR, strerror(errno), 32);
+        perror("mkdir: ");
+        // char* err = strerror(errno);
+        // printf("err:%s|\n",err);
     }
     get_ls(req.cwd, &res->data);
     return ret;
