@@ -14,8 +14,8 @@ void ignoreSIGINT(int sig){
 
 int main(int argc, char **argv)
 {
-    req_msg_q_id = create_msg_q("keyfile", 1);
-    res_msg_q_id = create_msg_q("keyfile", 2);
+    req_msg_q_id = create_msg_q("keyfile", MSG_Q_REQ_PROJ_ID);
+    res_msg_q_id = create_msg_q("keyfile", MSG_Q_RES_PROJ_ID);
     
     // tzset();
     char *command, *tok_str;

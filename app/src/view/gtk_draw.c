@@ -63,47 +63,50 @@ void mkdir_popup_init(GtkWidget* parent){
     int MAX_HEIGHT = 400;
     // add_btn
     mkdir_modal.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(mkdir_modal.window), "Popup Window");
+    gtk_window_set_title(GTK_WINDOW(mkdir_modal.window), "File Info");
     gtk_window_set_position(GTK_WINDOW(mkdir_modal.window), GTK_WIN_POS_CENTER);
     gtk_window_set_default_size(GTK_WINDOW(mkdir_modal.window), MAX_WIDTH, MAX_HEIGHT);
     
     gtk_window_set_transient_for(GTK_WINDOW(mkdir_modal.window), GTK_WINDOW(parent));
     gtk_window_set_modal(GTK_WINDOW(mkdir_modal.window), TRUE);
 
-    // layout
+    // layout (600, 400)
     GtkWidget* vbox, *func_vbox, *ctrl_hbox;
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(mkdir_modal.window), vbox);
 
     func_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(func_vbox, MAX_WIDTH, 300);
+    gtk_widget_set_size_request(func_vbox, MAX_WIDTH, 350);
 
     ctrl_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(ctrl_hbox, MAX_WIDTH, 100);
+    gtk_widget_set_size_request(ctrl_hbox, MAX_WIDTH, 50);
 
     gtk_box_pack_start(GTK_BOX(vbox), func_vbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), ctrl_hbox, TRUE, TRUE, 0);
 
-    // func_box
+    // func_box (600, 350)
     GtkWidget* setting_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(setting_hbox, 600, 75);
+    gtk_widget_set_size_request(setting_hbox, 600, 45);
     gtk_box_pack_start(GTK_BOX(func_vbox), setting_hbox, TRUE, TRUE, 0);
     GtkWidget* perm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(perm_vbox, 600, 225);
+    gtk_widget_set_size_request(perm_vbox, 600, 255);
     gtk_box_pack_start(GTK_BOX(func_vbox), perm_vbox, TRUE, TRUE, 0);
 
-    // setting_hbox
+    // setting_hbox (600, 45)
     GtkWidget* type_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_size_request(type_vbox, 200, 45);
     gtk_box_pack_start(GTK_BOX(setting_hbox), type_vbox, TRUE, TRUE, 0);
     GtkWidget* inp_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_size_request(inp_vbox, 400, 45);
     gtk_box_pack_start(GTK_BOX(setting_hbox), inp_vbox, TRUE, TRUE, 0);
 
-    // type_vbox
-    GtkWidget* type_label = gtk_label_new("file type");
-    gtk_box_pack_start(GTK_BOX(type_vbox), type_label, TRUE, TRUE, 0);
+    // type_vbox (200, 45)
+    GtkWidget* type_label = gtk_label_new("File Type");
+    gtk_widget_set_size_request(type_label, 200, 20);
+    gtk_box_pack_start(GTK_BOX(type_vbox), type_label, FALSE, FALSE, 0);
 
     mkdir_modal.select_type = gtk_combo_box_text_new();
-    gtk_widget_set_size_request(mkdir_modal.select_type, 100, 100);
+    gtk_widget_set_size_request(mkdir_modal.select_type, 200, 25);
 
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "directory");
     gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "file");
@@ -111,24 +114,28 @@ void mkdir_popup_init(GtkWidget* parent){
 
     gtk_combo_box_set_active(GTK_COMBO_BOX(mkdir_modal.select_type), 0);  // 기본 선택 항목 설정
 
-    gtk_box_pack_start(GTK_BOX(type_vbox), mkdir_modal.select_type, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(type_vbox), mkdir_modal.select_type, FALSE, FALSE, 0);
 
-    // inp_vbox
-    GtkWidget* inp_label = gtk_label_new("file name");
-    gtk_box_pack_start(GTK_BOX(inp_vbox), inp_label, TRUE, TRUE, 0);
+    // inp_vbox (400, 45)
+    GtkWidget* inp_label = gtk_label_new("File Name");
+    gtk_widget_set_size_request(inp_label, 400, 20);
+    gtk_box_pack_start(GTK_BOX(inp_vbox), inp_label, FALSE, FALSE, 0);
     mkdir_modal.inp_filename = gtk_entry_new();
-    gtk_entry_set_placeholder_text(GTK_ENTRY(mkdir_modal.inp_filename), "Enter some text here...");
+    gtk_widget_set_size_request(mkdir_modal.inp_filename, 400, 25);
+    gtk_entry_set_placeholder_text(GTK_ENTRY(mkdir_modal.inp_filename), "input new filename...");
     gtk_box_pack_start(GTK_BOX(inp_vbox), mkdir_modal.inp_filename, FALSE, FALSE, 0);
 
     mkdir_modal.inp_error_label = gtk_label_new("");
-    gtk_box_pack_start(GTK_BOX(inp_vbox), mkdir_modal.inp_error_label, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(inp_vbox), mkdir_modal.inp_error_label, FALSE, FALSE, 0);
     
-    // perm_hbox
-    GtkWidget* perm_label =  gtk_label_new("file access permission");
-    gtk_box_pack_start(GTK_BOX(perm_vbox), perm_label, TRUE, TRUE, 0);
+    // perm_hbox (600, 225)
+    GtkWidget* perm_label =  gtk_label_new("File Access Permission");
+    gtk_widget_set_size_request(perm_label, 600, 25);
+    gtk_box_pack_start(GTK_BOX(perm_vbox), perm_label, FALSE, FALSE, 0);
 
     GtkWidget* ugo_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_box_pack_start(GTK_BOX(perm_vbox), ugo_hbox, TRUE, TRUE, 0);
+    gtk_widget_set_size_request(ugo_hbox, 600, 200);
+    gtk_box_pack_start(GTK_BOX(perm_vbox), ugo_hbox, FALSE, FALSE, 0);
     GtkWidget* u_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget* g_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget* o_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -155,7 +162,7 @@ void mkdir_popup_init(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(g_vbox), mkdir_modal.perm_check_box[3], TRUE, TRUE, 0);
 
     GtkWidget* o_label =  gtk_label_new("others");
-    gtk_box_pack_start(GTK_BOX(o_vbox), o_label, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(o_vbox), o_label, TRUE, TRUE, 10);
     mkdir_modal.perm_check_box[2] = gtk_check_button_new_with_label("read");
     mkdir_modal.perm_check_box[1] = gtk_check_button_new_with_label("write");
     mkdir_modal.perm_check_box[0] = gtk_check_button_new_with_label("execute");
@@ -230,6 +237,9 @@ void build_layout(GtkWidget* window){
     gtk_box_pack_start(GTK_BOX(body_h), content_box_v, TRUE, TRUE, 5);
 
     // side_box_v :
+    GtkWidget* btn_mvdir_desktop;
+    GtkWidget* btn_mvdir_downloads;
+    GtkWidget* btn_mvdir_documents;
 
     // content_box_v :
     GtkWidget* dir_box_h, *search_box_h, *list_box;

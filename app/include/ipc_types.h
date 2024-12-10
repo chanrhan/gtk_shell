@@ -1,6 +1,9 @@
 #ifndef IPC_TYPES_H
 #define IPC_TYPES_H
 
+#define MSG_Q_REQ_PROJ_ID 101
+#define MSG_Q_RES_PROJ_ID 201
+
 #define CMD_LS 1 // ls
 #define CMD_PS 
 
@@ -35,9 +38,6 @@
 
 #define ARG_SIZE 16
 
-// error code
-#define FILE_ALREADY_EXIST 414
-
 // extern long SYSTEM_MSGMAX;
 
 typedef struct file_info_t{
@@ -55,15 +55,15 @@ typedef struct msg_data_t{
 typedef struct req_msg_t{
     long mtype;
     int cmd;
-    char cwd[32];
-    char args[4][16];
+    char cwd[CWD_LEN];
+    char args[4][ARG_SIZE];
 } req_msg_t;
 
 typedef struct res_msg_t{
     long mtype;
     int status;
     // int error_code;
-    char cwd[32];
+    char cwd[CWD_LEN];
     msg_data_t data;
 } res_msg_t;
 

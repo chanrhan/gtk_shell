@@ -1,6 +1,7 @@
 #include "gtk_utils.h"
 
 int gtk_exit(GtkWidget* widget, gpointer data){
+    printf("QUIT\n");
     // msgctl(req_msg_q_id, IPC_RMID, (struct msqid_ds*)NULL);
     msgctl(res_msg_q_id, IPC_RMID, (struct msqid_ds*)NULL);
 

@@ -5,8 +5,14 @@ int send_to_server(req_msg_t* req)
     strncpy(req->cwd, cwd, CWD_LEN);
     req->mtype=1;
     printf("Send cmd: %d\n", req->cmd);
+    // char* p = req;
+    // printf("---START---\n");
+    // for(int i=0;p[i]='\0';++i){
+    //     printf("%c", p[i]);
+    // }
+    // printf("----END----\n");
 
-    if ((msgsnd(req_msg_q_id, (void *)req, sizeof(req_msg_t), IPC_NOWAIT)) == -1)
+    if ((msgsnd(req_msg_q_id, req, sizeof(req_msg_t), IPC_NOWAIT)) == -1)
     {
         perror("msgsnd");
         exit(1);

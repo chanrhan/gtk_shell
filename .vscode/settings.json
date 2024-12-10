@@ -67,6 +67,7 @@
     "gtk.h": "c",
     "view_types.h": "c",
     "ipc_types.h": "c",
-    "server_func.h": "c"
+    "server_func.h": "c",
+    "ipc_view.h": "c"
   }
 }

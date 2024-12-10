@@ -118,6 +118,10 @@ int g_callback_mkdir_popup_submit(GtkWidget* widget, gpointer data){
     return TRUE;
 }
 
+int g_callback_mvdir_toolbar(GtkWidget* widget, gpointer data){
+    
+}
+
 gboolean on_realize(gpointer data){
     printf("realize\n");
     move_directory(NULL);

@@ -21,6 +21,18 @@ int send_to_view(res_msg_t* res){
     // printf("Current bytes in queue: %lu\n", buf.msg_cbytes); // 현재 사용된 바이트
     // printf("Number of messages: %lu\n", buf.msg_qnum);          // 메시지 수
     // printf("Maximum bytes allowed: %lu\n", buf.msg_qbytes);    // 최대 바이트 수
+    // char* buf = (char*)malloc(1024);
+    // int ret = (msgsnd(res_msg_q_id, buf, sizeof(res_msg_t), IPC_NOWAIT));
+    // printf("---START---\n");
+    // for(int i=0;buf[i]!='\0';++i){
+    //     printf("%c",buf[i]);
+    // }
+    // printf("----END----\n");
+    //  if(ret == -1){
+    //     perror("msgsnd");
+    //     return 1;
+    // }
+    // return 0;
 
     if((msgsnd(res_msg_q_id, res, sizeof(res_msg_t), IPC_NOWAIT)) == -1){
         perror("msgsnd");

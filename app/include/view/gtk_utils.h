@@ -10,6 +10,7 @@ DECLARE_GTK_CALLBACK(quit);
 DECLARE_GTK_CALLBACK(mkdir_popup_open);
 DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
 DECLARE_GTK_CALLBACK(mkdir_popup_submit);
+DECLARE_GTK_CALLBACK(mvdir_toolbar);
 
 int gtk_exit(GtkWidget* widget, gpointer data);
 
