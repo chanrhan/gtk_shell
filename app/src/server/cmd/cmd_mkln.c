@@ -2,13 +2,13 @@
 
 int cmd_mkln(req_msg_t req, res_msg_t *res){
     char source[CWD_LEN];
-    if(validate_path(req.cwd, req.args[0], &source, 1) != 0){
+    if(append_path(req.cwd, req.args[0], &source, 1) != 0){
         perror("validat_path");
         return 1;
     }
 
     char dest[CWD_LEN];
-    if(validate_path(req.cwd, req.args[1], &dest, 1) != 0){
+    if(append_path(req.cwd, req.args[1], &dest, 1) != 0){
         perror("validat_path");
         return 1;
     }

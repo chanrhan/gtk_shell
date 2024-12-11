@@ -1,7 +1,7 @@
 #include "cmd.h"
 
 int cmd_ls(req_msg_t req, res_msg_t* res){
-    if(validate_path(req.cwd, req.args[0], &res->cwd, 0) != 0){
+    if(append_path(req.cwd, req.args[0], &res->cwd, 0) != 0){
         printf("access failed!");
         return 1;
     }

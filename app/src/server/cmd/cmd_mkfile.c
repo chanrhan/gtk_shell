@@ -2,7 +2,7 @@
 
 int cmd_mkfile(req_msg_t req, res_msg_t *res){
     char cwd[CWD_LEN];
-    if(validate_path(req.cwd, req.args[0], &cwd, 1) != 0){
+    if(append_path(req.cwd, req.args[0], &cwd, 1) != 0){
         perror("validat_path");
         return 1;
     }

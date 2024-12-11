@@ -1,6 +1,6 @@
 #include "gtk_draw.h"
 #include "gtk_callback.h"
-#include "gtk_modals.h"
+#include "gtk_modal.h"
 
 void update_directory(res_msg_t res){
     for(int i=0;i<res.data.file_len;++i){
@@ -169,14 +169,17 @@ void build_layout(GtkWidget* window){
     }
     
     // footer_h :
-    GtkWidget* clipboard_vbox, *option_vbox;
+    GtkWidget* clipboard_vbox;
     clipboard_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_name(clipboard_vbox, "clipboard_box");
     gtk_box_pack_start(GTK_BOX(footer_vbox), clipboard_vbox, TRUE, TRUE, 0);
- 
-    option_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_name(option_vbox, "option_box");
-    gtk_box_pack_start(GTK_BOX(footer_vbox), option_vbox, TRUE, TRUE, 0);
+
+    copied_file_label = gtk_label_new("");
+    gtk_box_pack_start(GTK_BOX(clipboard_vbox), copied_file_label, TRUE, TRUE, 0);
+    
+    // option_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // gtk_widget_set_name(option_vbox, "option_box");
+    // gtk_box_pack_start(GTK_BOX(footer_vbox), option_vbox, TRUE, TRUE, 0);
 
     gtk_widget_add_events(window, GDK_BUTTON_PRESS_MASK);
 }

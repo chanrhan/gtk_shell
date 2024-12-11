@@ -4,7 +4,7 @@ int cmd_mkdir(req_msg_t req, res_msg_t *res)
 {
     char cwd[CWD_LEN];
     // printf("cwd:%s,mk:%s,mode:%d\n", req.cwd, req.args[0], (mode_t)atoi(req.args[1]));
-    if(validate_path(req.cwd, req.args[0], &cwd, 1) != 0){
+    if(append_path(req.cwd, req.args[0], &cwd, 1) != 0){
         perror("validat_path");
         return 1;
     }

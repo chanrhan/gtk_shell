@@ -33,6 +33,6 @@ extern int cmd_list_size;
 
 void get_ls(char *pwd, msg_data_t *data);
 
-int validate_path(char *org_cwd, char *append, char* cwd, int mode);
+int append_path(char *org_cwd, char *append, char* cwd, int mode);
 
 #endif

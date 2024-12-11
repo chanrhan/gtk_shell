@@ -8,6 +8,8 @@
 // DECLARE_GTK_CALLBACK(mvdir);
 DECLARE_GTK_CALLBACK(quit);
 DECLARE_GTK_CALLBACK(mkdir_popup_open);
+DECLARE_GTK_CALLBACK(dir_info_open);
+DECLARE_GTK_CALLBACK(file_info_open);
 
 // modal
 DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
@@ -26,9 +28,6 @@ DECLARE_GTK_CALLBACK(file_execute);
 DECLARE_GTK_CALLBACK(file_mklink);
 
 // menu: dir option
-DECLARE_GTK_CALLBACK(dir_copy);
-DECLARE_GTK_CALLBACK(dir_rename);
-DECLARE_GTK_CALLBACK(dir_move);
 DECLARE_GTK_CALLBACK(dir_remove);
 
 

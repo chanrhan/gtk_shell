@@ -1,4 +1,4 @@
-#include "gtk_modals.h"
+#include "gtk_modal.h"
 #include "gtk_callback.h"
 
 
@@ -59,7 +59,7 @@ void init_dir_menu_context(GtkWidget* parent){
 
     g_signal_connect(item_cp, "activate", G_CALLBACK(g_callback_file_copy), NULL);
     g_signal_connect(item_rm, "activate", G_CALLBACK(g_callback_dir_remove), NULL);
-    g_signal_connect(item_rename, "activate", G_CALLBACK(g_callback_dir_rename), NULL);
+    g_signal_connect(item_rename, "activate", G_CALLBACK(g_callback_file_rename), NULL);
     g_signal_connect(item_mv, "activate", G_CALLBACK(g_callback_file_move), NULL);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_cp);
@@ -120,20 +120,20 @@ void init_mkdir_modal(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(setting_hbox), inp_vbox, TRUE, TRUE, 0);
 
     // type_vbox (200, 45)
-    GtkWidget* type_label = gtk_label_new("File Type");
-    gtk_widget_set_size_request(type_label, 200, 20);
-    gtk_box_pack_start(GTK_BOX(type_vbox), type_label, FALSE, FALSE, 0);
+    // GtkWidget* type_label = gtk_label_new("File Type");
+    // gtk_widget_set_size_request(type_label, 200, 20);
+    // gtk_box_pack_start(GTK_BOX(type_vbox), type_label, FALSE, FALSE, 0);
 
-    mkdir_modal.select_type = gtk_combo_box_text_new();
-    gtk_widget_set_size_request(mkdir_modal.select_type, 200, 25);
+    // mkdir_modal.select_type = gtk_combo_box_text_new();
+    // gtk_widget_set_size_request(mkdir_modal.select_type, 200, 25);
 
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "directory");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "file");
-    gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "link");
+    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "directory");
+    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "file");
+    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "link");
 
-    gtk_combo_box_set_active(GTK_COMBO_BOX(mkdir_modal.select_type), 0);  // 기본 선택 항목 설정
+    // gtk_combo_box_set_active(GTK_COMBO_BOX(mkdir_modal.select_type), 0);  // 기본 선택 항목 설정
 
-    gtk_box_pack_start(GTK_BOX(type_vbox), mkdir_modal.select_type, FALSE, FALSE, 0);
+    // gtk_box_pack_start(GTK_BOX(type_vbox), mkdir_modal.select_type, FALSE, FALSE, 0);
 
     // inp_vbox (400, 45)
     GtkWidget* inp_label = gtk_label_new("File Name");

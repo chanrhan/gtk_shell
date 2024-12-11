@@ -7,9 +7,19 @@ file_info_t file_list[FILE_DISPLAY_LIMIT];
 GtkWidget* label_data[8];
 GtkWidget* dir_text;
 
+file_info_t copied_file;
+GtkWidget* copied_file_label;
+
 int selected_index = 0;
+int edit_mode = 0; 
+
+void init(){
+
+}
 
 int main(int argc, char** argv){
+    
+
     printf("START VIEW\n");
     req_msg_q_id = create_msg_q("keyfile", MSG_Q_REQ_PROJ_ID);
     res_msg_q_id = create_msg_q("keyfile", MSG_Q_RES_PROJ_ID);
@@ -18,6 +28,7 @@ int main(int argc, char** argv){
     GtkWidget *window = create_gtk_main_window();
     build_layout(window);
 
+    init();
     g_idle_add(on_realize, NULL);
 
     gtk_widget_show_all(window);

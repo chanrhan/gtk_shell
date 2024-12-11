@@ -87,7 +87,7 @@ void get_ls(char *pwd, msg_data_t *data)
     closedir(dp); // 사용 끝났으니 닫기
 }
 
-int validate_path(char *org_cwd, char *append, char* cwd, int mode)
+int append_path(char *org_cwd, char *append, char* cwd, int mode)
 {
     if (append[0] != '\0')
     {
