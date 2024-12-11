@@ -1,8 +1,7 @@
 #ifndef GTK_DRAW_H
 #define GTK_DRAW_H
 
-#include "gtk_utils.h"
-#include "gtk_modals.h"
+#include "view_common.h"
 
 void set_text_current_dir(char* new_cwd);
 

@@ -1,9 +1,13 @@
-#include "view.h"
+#include "gtk_draw.h"
+#include "view_func.h"
+
 
 char cwd[32] = "/tmp/test";
 file_info_t file_list[FILE_DISPLAY_LIMIT];
 GtkWidget* label_data[8];
 GtkWidget* dir_text;
+
+int selected_index = 0;
 
 int main(int argc, char** argv){
     printf("START VIEW\n");

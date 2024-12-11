@@ -36,18 +36,6 @@ extern pair_string_int_t type_list[];
 
 extern int type_list_size;
 
-#define DECLARE_CMDFUNC(str) int cmd_##str(req_msg_t req, res_msg_t* res)
-
-// 명령어 구현 함수 선언
-DECLARE_CMDFUNC(mkdir);
-DECLARE_CMDFUNC(mk);
-
-DECLARE_CMDFUNC(rmdir);
-DECLARE_CMDFUNC(rename);
-DECLARE_CMDFUNC(ls);
-DECLARE_CMDFUNC(chmod);
-DECLARE_CMDFUNC(kill);
-DECLARE_CMDFUNC(chroot);
 
 // 구현 명령어 목록 
 extern cmd_t cmd_list[];

@@ -11,13 +11,13 @@
 #define CMD_MK_FILE 11 // \ud30c\uc77c \uc0dd\uc131 (cat)
 #define CMD_MK_LN 12  // \ub9c1\ud06c \ud30c\uc77c \uc0dd\uc131 
 
-#define CMD_MV 20
-#define CMD_RENAME 21
-#define CMD_CP 22
-#define CMD_RM_DIR 23
-#define CMD_RM_FILE 24
-#define CMD_CH_FILE 25
-#define CMD_EXEC 26
+#define CMD_MV 20 // 이동 
+#define CMD_RENAME 21 // 이름, 접근 권한 수정 (한번에)
+#define CMD_CP 22 // 복사 
+#define CMD_RM_DIR 23 // 폴더 삭제 
+#define CMD_RM_FILE 24 // 파일 삭제
+#define CMD_CH_FILE 25 // 파일 수정 
+#define CMD_EXEC 27 // 파일 실행 
 
 #define CMD_KILL 40
 

@@ -1,4 +1,22 @@
-#include "server_func.h"
+#include "cmd.h"
+
+cmd_t cmd_list[] = {
+    {CMD_LS, cmd_ls},
+    {CMD_MK_DIR, cmd_mkdir}, 
+    {CMD_MK_FILE, cmd_mkfile},
+    {CMD_MK_LN, cmd_mkln},
+    {CMD_RENAME, cmd_rename},
+    {CMD_RM_DIR, cmd_rmdir},
+    {CMD_RM_FILE, cmd_rmfile},
+    {CMD_MV, cmd_move},
+    {CMD_CP, cmd_copy},
+    {CMD_EXEC, cmd_execute},
+    {CMD_CH_FILE, cmd_execute},
+    {CMD_EXEC, cmd_execute},
+    {CMD_EXEC, cmd_execute},
+};
+
+int cmd_list_size = sizeof(cmd_list) / sizeof(cmd_t);
 
 void get_ls(char *pwd, msg_data_t *data)
 {
@@ -107,56 +125,9 @@ int validate_path(char *org_cwd, char *append, char* cwd, int mode)
     return 0;
 }
 
-int cmd_ls(req_msg_t req, res_msg_t *res)
-{
-    if(validate_path(req.cwd, req.args[0], &res->cwd, 0) != 0){
-        printf("access failed!");
-        return 1;
-    }
-    get_ls(res->cwd, &res->data);
 
-    return 0;
-}
 
-int cmd_mkdir(req_msg_t req, res_msg_t *res)
-{
-    char cwd[CWD_LEN];
-    printf("cwd:%s,mk:%s,mode:%d\n", req.cwd, req.args[0], (mode_t)atoi(req.args[1]));
-    if(validate_path(req.cwd, req.args[0], &cwd, 1) != 0){
-        perror("validat_path");
-        return 1;
-    }
 
-    printf("validate cwd:%s\n", cwd);
-    int ret = mkdir(cwd, atoi(req.args[1]));
-    if(ret != 0){
-        perror("mkdir: ");
-        // char* err = strerror(errno);
-        // printf("err:%s|\n",err);
-    }
-    get_ls(req.cwd, &res->data);
-    return ret;
-}
 
-int cmd_mk(req_msg_t req, res_msg_t *res){
-    
-}
 
-int cmd_rmdir(req_msg_t req, res_msg_t *res)
-{
-    int ret = rmdir(req.args[0]);
-    get_ls(req.cwd, &res->data);
-    return ret;
-}
 
-int cmd_rename(req_msg_t req, res_msg_t *res)
-{
-    char* cwd;
-    if(validate_path(req.cwd, req.args[0], cwd, 0) != 0){
-        perror("validat_path");
-        return 1;
-    }
-    int ret = rename(cwd, req.args[1]);
-    get_ls(req.cwd, &res->data);
-    return ret;
-}

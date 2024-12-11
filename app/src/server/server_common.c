@@ -2,16 +2,6 @@
 
 const char* ROOT_DIR = "/tmp/test";
 
-cmd_t cmd_list[] = {
-    {CMD_LS, cmd_ls},
-    // {CMD_ACCESS, cmd_cd},
-    {CMD_MK_DIR, cmd_mkdir},
-    {CMD_RM_DIR, cmd_rmdir},
-    {CMD_RENAME, cmd_rename}
-};
-
-int cmd_list_size = sizeof(cmd_list) / sizeof(cmd_t);
-
 pair_string_int_t type_list[]={
     {S_IFSOCK, 's'},
     {S_IFLNK, 'l'},
