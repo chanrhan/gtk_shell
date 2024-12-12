@@ -2,19 +2,22 @@
 #include "view_func.h"
 
 
-char cwd[32] = "/tmp/test";
-file_info_t file_list[FILE_DISPLAY_LIMIT];
-GtkWidget* label_data[8];
+char cwd[MAX_PATH_LEN] = "/tmp/test";
+file_info_t file_list[MAX_FILE_LIST_SIZE];
+GtkWidget* label_data[MAX_FILE_LIST_SIZE];
 GtkWidget* dir_text;
 
 file_info_t copied_file;
 GtkWidget* copied_file_label;
+GtkLabel* dialog_label;
 
 int selected_index = 0;
 int edit_mode = 0; 
+int copy_mode = -1;
+int file_list_size = 0;
 
 void init(){
-
+    
 }
 
 int main(int argc, char** argv){

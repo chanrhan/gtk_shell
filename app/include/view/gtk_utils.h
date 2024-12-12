@@ -15,14 +15,14 @@ int remove_dir(char* filename);
 
 int remove_file(char* filename);
 
-int move_file(char* source, char* dest);
+int move_file();
 
 int copy_file();
 
-int paste_file(char* path);
+int paste_file();
 
 int execute_file(char* filename);
 
-int link_file(char* path);
+int link_file();
 
 #endif

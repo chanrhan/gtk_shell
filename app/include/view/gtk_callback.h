@@ -20,6 +20,7 @@ DECLARE_GTK_CALLBACK(mvdir_toolbar);
 
 // menu: file option
 DECLARE_GTK_CALLBACK(file_copy);
+DECLARE_GTK_CALLBACK(file_paste);
 DECLARE_GTK_CALLBACK(file_rename);
 DECLARE_GTK_CALLBACK(file_modify);
 DECLARE_GTK_CALLBACK(file_move);

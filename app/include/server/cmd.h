@@ -31,7 +31,7 @@ extern cmd_t cmd_list[];
 
 extern int cmd_list_size;
 
-void get_ls(char *pwd, msg_data_t *data);
+void get_file_list(char *pwd, msg_data_t *data);
 
 int append_path(char *org_cwd, char *append, char* cwd, int mode);
 

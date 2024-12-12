@@ -67,7 +67,12 @@ int main(int argc, char **argv)
                 break;
             }
             ret = select_cmd(req_msg_buf, &res_msg_buf);
-            res_msg_buf.status = ret;
+            if(ret == 0){
+                res_msg_buf.status = STATUS_OK;
+            }else{
+                res_msg_buf.status = STATUS_FAIL;
+            }
+            
             if(send_to_view(&res_msg_buf) == 0){
                 printf("\nsuccess!\n");
                 continue;

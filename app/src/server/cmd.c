@@ -8,17 +8,16 @@ cmd_t cmd_list[] = {
     {CMD_RENAME, cmd_rename},
     {CMD_RM_DIR, cmd_rmdir},
     {CMD_RM_FILE, cmd_rmfile},
-    {CMD_MV, cmd_move},
+    {CMD_MV, cmd_move}, 
     {CMD_CP, cmd_copy},
     {CMD_EXEC, cmd_execute},
-    {CMD_CH_FILE, cmd_execute},
-    {CMD_EXEC, cmd_execute},
-    {CMD_EXEC, cmd_execute},
+    {CMD_PS, cmd_ps},
+    {CMD_KILL, cmd_kill},
 };
 
 int cmd_list_size = sizeof(cmd_list) / sizeof(cmd_t);
 
-void get_ls(char *pwd, msg_data_t *data)
+void get_file_list(char *pwd, msg_data_t *data)
 {
     DIR *dp;
     struct dirent *dent;
@@ -41,6 +40,7 @@ void get_ls(char *pwd, msg_data_t *data)
         // stat 명령어를 통해 파일의 상세 정보 가져와서 출력
         struct stat statbuf;
         stat(dent->d_name, &statbuf);
+        // printf("[%s] a:%u,s:%u,m:%u", statbuf.st_atimespec);
 
         unsigned int mode = statbuf.st_mode;
 
@@ -72,17 +72,17 @@ void get_ls(char *pwd, msg_data_t *data)
 
         data->files[i].type = (int)dent->d_type;
         strncpy(data->files[i].name, dent->d_name, 16);
-        strncpy(data->files[i].mtime, gettime_str(statbuf.st_mtime), 9);
+        strncpy(data->files[i].mtime, gettime_str(statbuf.st_mtime), MTIME_LEN);
         data->files[i].size = statbuf.st_size;
 
         ++i;
-        if (i >= FILE_DISPLAY_LIMIT - 1)
+        if (i >= MAX_FILE_LIST_SIZE - 1)
         {
             break;
         }
     }
     data->file_len = i;
-    // printf("file_len: %d\n", data->file_len);
+    printf("file_len: %d\n", data->file_len);
 
     closedir(dp); // 사용 끝났으니 닫기
 }
@@ -95,7 +95,7 @@ int append_path(char *org_cwd, char *append, char* cwd, int mode)
         {
             // 최상위 ROOT 디렉토리를 벗어나면 
             if(strcmp(org_cwd, ROOT_DIR) == 0 || strncmp(ROOT_DIR, org_cwd, strlen(ROOT_DIR)) != 0){
-                strncpy(cwd, org_cwd, CWD_LEN);
+                strncpy(cwd, org_cwd, MAX_PATH_LEN);
                 return 1;
             }
             // printf("cwd:%s\n", cwd);
@@ -105,7 +105,7 @@ int append_path(char *org_cwd, char *append, char* cwd, int mode)
         }
         else
         {
-            snprintf(cwd, CWD_LEN, "%s/%s", org_cwd, append);
+            snprintf(cwd, MAX_PATH_LEN, "%s/%s", org_cwd, append);
         }
         if (mode == 0 && access(cwd, 0) == -1)
         {
@@ -119,7 +119,7 @@ int append_path(char *org_cwd, char *append, char* cwd, int mode)
             perror("access");
             return 1;
         }
-        strncpy(cwd, org_cwd, CWD_LEN);
+        strncpy(cwd, org_cwd, MAX_PATH_LEN);
     }
     
     return 0;

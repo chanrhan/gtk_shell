@@ -1,6 +1,9 @@
 #include "ipc_server.h"
 #include <sys/msg.h>
 
+int req_msg_q_id = 0;
+int res_msg_q_id = 0;
+
 int send_to_view(res_msg_t* res){
     res->mtype=1;
     printf("Send status: %d\n", res->status);

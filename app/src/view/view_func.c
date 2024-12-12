@@ -14,14 +14,14 @@ int move_directory(char* append){
         req.args[0][0] = '\0';
     }
     send_wait_rcv(&req, &res);
-    if(res.status != 0){
+    if(res.status != STATUS_OK){
         return 1;
     }
-    printf("move: %s [%d] success!\n", cwd, res.data.file_len);
+    // printf("move: %s [%d] success!\n", cwd, res.data.file_len);
 
-    update_directory(res);
 
     set_text_current_dir(res.cwd);
+    update_file_list(res);
 
     return 0;
 }

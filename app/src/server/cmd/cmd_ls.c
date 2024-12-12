@@ -5,7 +5,7 @@ int cmd_ls(req_msg_t req, res_msg_t* res){
         printf("access failed!");
         return 1;
     }
-    get_ls(res->cwd, &res->data);
+    get_file_list(res->cwd, &res->data);
 
     return 0;
 }

@@ -16,6 +16,9 @@
 
 #define MAX_CMD_SIZE 1024
 
+extern int req_msg_q_id;
+extern int res_msg_q_id;
+
 // 최상위 디렉토리
 extern const char* ROOT_DIR;
 

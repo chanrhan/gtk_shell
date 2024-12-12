@@ -5,7 +5,7 @@
 #define MSG_Q_RES_PROJ_ID 201
 
 #define CMD_LS 1 // ls
-#define CMD_PS 
+#define CMD_PS 2
 
 #define CMD_MK_DIR 10 // \ud3f4\ub354 \uc0dd\uc131
 #define CMD_MK_FILE 11 // \ud30c\uc77c \uc0dd\uc131 (cat)
@@ -27,43 +27,45 @@
 #define STATUS_FAIL 1
 
 #define MSG_MAX_SIZE 32
-#define FILE_DISPLAY_LIMIT 8
+#define MAX_FILE_LIST_SIZE 16
 
 #define MSG_END '\0'
 #define MSG_TRUE '0'
 #define MSG_FALSE '1'
 
 #define FILE_END -1
-#define CWD_LEN 32
+#define MAX_PATH_LEN 64
 
-#define ARG_SIZE 16
+#define MAX_ARGV_SIZE 64
+// #define MAX_FILENAME_SIZE 64
+#define MTIME_LEN 9
 
 // extern long SYSTEM_MSGMAX;
 
 typedef struct file_info_t{
     int type;
-    char name[16];
-    char mtime[9];
+    char name[MAX_PATH_LEN];
+    char mtime[MTIME_LEN];
     int size;
 } file_info_t;
 
 typedef struct msg_data_t{
     int file_len;
-    file_info_t files[FILE_DISPLAY_LIMIT];
+    file_info_t files[MAX_FILE_LIST_SIZE];
 } msg_data_t;
 
 typedef struct req_msg_t{
     long mtype;
     int cmd;
-    char cwd[CWD_LEN];
-    char args[4][ARG_SIZE];
+    char cwd[MAX_PATH_LEN];
+    char args[4][MAX_ARGV_SIZE];
 } req_msg_t;
 
 typedef struct res_msg_t{
     long mtype;
     int status;
     // int error_code;
-    char cwd[CWD_LEN];
+    char cwd[MAX_PATH_LEN];
     msg_data_t data;
 } res_msg_t;
 
