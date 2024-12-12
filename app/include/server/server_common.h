@@ -11,6 +11,7 @@
 #include <signal.h>
 #include <sys/times.h>
 #include <limits.h>
+#include "util.h"
 #include "ipc.h"
 #include "ipc_types.h"
 

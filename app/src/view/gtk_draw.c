@@ -19,14 +19,18 @@ void update_file_list(res_msg_t res){
         // printf("(%d).\n", i);
         gtk_label_set_text(GTK_LABEL(label_data[i]), text);
         
-        if(copy_mode == 1 && strcmp(copied_file.name, "") != 0){
-            char tp[MAX_PATH_LEN];
-            snprintf(tp, MAX_PATH_LEN, "%s/%s", cwd, file_list[i].name);
-            if(strcmp(copied_file.name, tp) == 0){
+        char tp[MAX_PATH_LEN];
+        snprintf(tp, MAX_PATH_LEN, "%s/%s", cwd, file_list[i].name);
+        if(strcmp(copied_file.name, tp) == 0){
                 gtk_style_class_toggle(label_data[i], "cut", TRUE);
-            }else{
-                gtk_style_class_toggle(label_data[i], "cut", FALSE);
-            }
+        }else{
+            gtk_style_class_toggle(label_data[i], "cut", FALSE);
+        }
+
+        if(strcmp(found_filename, tp) == 0){
+            gtk_style_class_toggle(label_data[i], "find", TRUE);
+        }else{
+            gtk_style_class_toggle(label_data[i], "find", FALSE);
         }
         
         ++i;
@@ -172,16 +176,18 @@ void build_layout(GtkWidget* window){
     GtkWidget* btn_mvdir_documents;
 
     // content_box_v :
-    GtkWidget* dir_vbox, *search_vbox, *list_vbox;
+    GtkWidget* dir_vbox, *search_hbox, *list_header_label, *list_vbox;
     dir_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(dir_vbox, 850, 50);
     // gtk_widget_set_name(dir_vbox, "dir_box");
      gtk_style_class_toggle(dir_vbox, "dir_box", TRUE);
 
-    search_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(search_vbox, 850, 50);
+    search_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_set_size_request(search_hbox, 850, 50);
     // gtk_widget_set_name(search_vbox, "search_box");
-     gtk_style_class_toggle(search_vbox, "search_box", TRUE);
+     gtk_style_class_toggle(search_hbox, "search_box", TRUE);
+
+     list_header_label = gtk_label_new("");
 
     GtkWidget* scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
@@ -189,7 +195,8 @@ void build_layout(GtkWidget* window){
     gtk_widget_set_size_request(scrolled_window, 850, 550);
 
     gtk_box_pack_start(GTK_BOX(content_vbox), dir_vbox, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(content_vbox), search_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(content_vbox), search_hbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(content_vbox), list_header_label, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(content_vbox), scrolled_window, TRUE, TRUE, 0);
 
     // dir_box_h
@@ -197,6 +204,18 @@ void build_layout(GtkWidget* window){
     //  gtk_widget_set_name(dir_text, "dir_text");
      gtk_style_class_toggle(dir_text, "dir_text", TRUE);
     gtk_box_pack_start(GTK_BOX(dir_vbox), dir_text, FALSE, FALSE, 0);
+
+    // search_hbox
+    search_inp = gtk_entry_new();
+    //  gtk_widget_set_size_request(search_inp, 400, 25);
+    gtk_entry_set_placeholder_text(GTK_ENTRY(search_inp), "search by filename...");
+    GtkWidget* btn_search;
+    btn_search = gtk_button_new_with_label("Search");
+    gtk_box_pack_start(GTK_BOX(search_hbox), search_inp, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(search_hbox), btn_search, TRUE, TRUE, 0);
+
+     g_signal_connect(search_inp, "changed", G_CALLBACK(g_callback_search_inp_changed), NULL);
+     g_signal_connect(btn_search, "clicked", G_CALLBACK(g_callback_search_file), NULL);
 
     // list_box
     list_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);

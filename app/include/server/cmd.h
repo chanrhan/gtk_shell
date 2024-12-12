@@ -24,6 +24,8 @@ DECLARE_CMDFUNC(execute); // MK_EXEC
 DECLARE_CMDFUNC(ps); // MK_PS 
 DECLARE_CMDFUNC(kill); // MK_KILL
 
+DECLARE_CMDFUNC(search); // SEARCH
+
 
 
 // 구현 명령어 목록 

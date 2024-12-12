@@ -19,6 +19,8 @@
 #define CMD_CH_FILE 25 // 파일 수정 
 #define CMD_EXEC 27 // 파일 실행 
 
+#define CMD_SEARCH 30
+
 #define CMD_KILL 40
 
 #define CMD_QUIT 90
@@ -64,8 +66,9 @@ typedef struct req_msg_t{
 typedef struct res_msg_t{
     long mtype;
     int status;
-    // int error_code;
+    int error_code;
     char cwd[MAX_PATH_LEN];
+    char find[MAX_PATH_LEN];
     msg_data_t data;
 } res_msg_t;
 

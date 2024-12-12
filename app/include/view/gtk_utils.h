@@ -3,6 +3,8 @@
 
 #include "view_common.h"
 
+int search_file();
+
 int submit_file_info();
 
 int make_dir();

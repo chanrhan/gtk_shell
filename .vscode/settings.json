@@ -75,6 +75,7 @@
     "server_common.h": "c",
     "gtk_callback.h": "c",
     "gtk_utils.h": "c",
-    "gtk_modal.h": "c"
+    "gtk_modal.h": "c",
+    "stack": "c"
   }
 }

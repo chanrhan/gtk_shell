@@ -2,6 +2,7 @@
 #define VIEW_COMMON_H
 
 #include <gtk/gtk.h>
+#include "util.h"
 #include "view_types.h"
 #include "ipc.h"
 #include "ipc_types.h"
@@ -22,6 +23,9 @@ extern int copy_mode; // copy or move
 
 extern GtkWidget* copied_file_label;
 extern GtkLabel* dialog_label;
+extern GtkWidget* search_inp;
+
+extern char found_filename[MAX_PATH_LEN];
 
 extern file_info_t copied_file;
 

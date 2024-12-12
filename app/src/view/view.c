@@ -10,6 +10,9 @@ GtkWidget* dir_text;
 file_info_t copied_file;
 GtkWidget* copied_file_label;
 GtkLabel* dialog_label;
+GtkWidget* search_inp;
+
+char found_filename[MAX_PATH_LEN];
 
 int selected_index = 0;
 int edit_mode = 0; 

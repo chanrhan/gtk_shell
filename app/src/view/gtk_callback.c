@@ -172,3 +172,11 @@ int g_callback_file_mklink(GtkWidget* widget, gpointer data){
 int g_callback_dir_remove(GtkWidget* widget, gpointer data){
     remove_dir(file_list[selected_index].name);
 }
+
+int g_callback_search_file(GtkWidget* widget, gpointer data){
+    search_file();
+}
+
+int g_callback_search_inp_changed(GtkWidget* widget, gpointer data){
+    strcpy(found_filename, "");
+}

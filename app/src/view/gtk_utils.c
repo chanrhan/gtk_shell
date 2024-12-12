@@ -271,4 +271,19 @@ int link_file(){
     }
 }
 
+int search_file(){
+    req_msg_t req;
+    res_msg_t res;
 
+    req.cmd = CMD_SEARCH;
+
+    char* text = gtk_entry_get_text(GTK_ENTRY(search_inp));
+    strncpy(req.args[0], text, MAX_ARGV_SIZE);
+
+    int len = send_wait_rcv(&req, &res);
+    if(len >= 0)
+        set_text_current_dir(res.cwd);
+        strncpy(found_filename, res.find, MAX_PATH_LEN);
+        update_file_list(res);
+    
+}

@@ -31,6 +31,9 @@ DECLARE_GTK_CALLBACK(file_mklink);
 // menu: dir option
 DECLARE_GTK_CALLBACK(dir_remove);
 
+DECLARE_GTK_CALLBACK(search_file);
+DECLARE_GTK_CALLBACK(search_inp_changed);
+
 
 int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer data);
 

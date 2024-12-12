@@ -57,6 +57,11 @@
     /* background-color: #63fad4; */
 }
 
+.file_item_text.find{
+    color: rgb(90, 52, 215);
+    /* background-color: #63fad4; */
+}
+
 .footer_box{
     background-color: rgb(107, 137, 255);
 }
