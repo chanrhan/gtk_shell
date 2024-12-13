@@ -108,6 +108,10 @@ int g_callback_dir_info_open(GtkWidget* widget, gpointer data){
     gtk_widget_show_all(md_mkdir.window);
 }
 
+// int g_callback_open_mkfile_modal(GtkWidget* widget, gpointer data){
+//     open_text_editor();
+// }
+
 int g_callback_submit_mkfile(GtkWidget* widget, gpointer data){
     write_file();
 }

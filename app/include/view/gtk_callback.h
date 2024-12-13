@@ -8,6 +8,7 @@
 // DECLARE_GTK_CALLBACK(mvdir);
 DECLARE_GTK_CALLBACK(quit);
 DECLARE_GTK_CALLBACK(mkdir_popup_open);
+DECLARE_GTK_CALLBACK(open_mkfile_modal);
 DECLARE_GTK_CALLBACK(dir_info_open);
 DECLARE_GTK_CALLBACK(file_info_open);
 

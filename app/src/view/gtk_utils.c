@@ -32,8 +32,8 @@ int open_text_editor(){
 }
 
 int write_file(){
-     char* filename = &md_text_editor.filename;
-     GtkTextBuffer *buffer;
+    char* filename = &md_text_editor.filename;
+    GtkTextBuffer *buffer;
     GtkTextIter start, end;
     gchar *text;
 
@@ -42,8 +42,6 @@ int write_file(){
     gtk_text_buffer_get_bounds(buffer, &start, &end); 
     text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
 
-    printf("(%d)text:%s\n", strlen(text), text);
-    
     req_msg_t req;
     res_msg_t res;
 
@@ -51,9 +49,15 @@ int write_file(){
     strncpy(req.args[0], filename, MAX_PATH_LEN);
     strncpy(req.text_buf, text, MAX_TXB_SIZE);
 
+    printf("(%d)text:%s\n", strlen(req.text_buf), req.text_buf);
+
+
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        move_directory(NULL);
+        show_dialog_text("File Create Success");
+        update_file_list(res);
+    }else{
+        show_dialog_text("File Create Failed");
     }
     g_free(text); // gtk_text_view_get_buffer로 가져온 gchar 텍스트는 반드시! g_free로 해제시켜줘야함
     gtk_widget_hide(md_text_editor.window);
@@ -94,6 +98,7 @@ int make_dir(){
 }
 
 int read_file(char* filename){
+    strcpy(md_text_editor.filename, filename);
     req_msg_t req;
     res_msg_t res;
 

@@ -44,14 +44,13 @@ void update_file_list(res_msg_t res){
 }
 
 void update_path_token(){
-    printf("update path toekn\n");
+    // printf("update path toekn\n");
     int size=0;
     char p[MAX_PATH_LEN];
     char show_text[MAX_PATH_LEN];
     int insertIdx = 0;
 
     strcpy(p, cwd);
-    printf("p:%s\n", p);
 
     char* tok = strtok(p, "/");
     strncpy(path_tok[size], tok, MAX_PATH_LEN);
@@ -59,17 +58,15 @@ void update_path_token(){
 
     while(1){
         tok = strtok(NULL, "/");
-        printf("(%d) tok:%s\n", size, tok);
+        // printf("(%d) tok:%s\n", size, tok);
         if(tok == NULL){
             break;
         }
         strncpy(path_tok[size], tok, MAX_PATH_LEN);
         ++size;
     }
-    printf("size:%d\n", size);
     int i=0;
     while(i < size){
-        printf("i:%d\n", i);
         insertIdx = i;
         if(size >= MAX_PATH_TOKEN){
             if(i > 2 && i < size - MAX_PATH_TOKEN + 3){
@@ -87,7 +84,7 @@ void update_path_token(){
             snprintf(show_text, MAX_PATH_LEN-2, "> %s", path_tok[i]);
         }
         
-        printf("(%d->%d) show_text:%s\n", i, insertIdx, show_text);
+        // printf("(%d->%d) show_text:%s\n", i, insertIdx, show_text);
         gtk_label_set_text(GTK_LABEL(path_tok_label[insertIdx]), show_text);
         path_tok_map[insertIdx] = i;
         ++i;
@@ -98,7 +95,6 @@ void update_path_token(){
         gtk_label_set_text(GTK_LABEL(path_tok_label[i]), "");
         ++i;
     }
-    printf("cwd:%s\n", cwd);
 }
 
 void update_current_working_directory(char* new_cwd){
@@ -207,6 +203,8 @@ void build_layout(GtkWidget* window){
     btn_quit = gtk_button_new_with_label("quit");
 
     g_signal_connect(btn_mkdir, "clicked", G_CALLBACK(g_callback_mkdir_popup_open), NULL);
+    g_signal_connect(btn_mkfile, "clicked", G_CALLBACK(g_callback_file_info_open), NULL);
+    // g_signal_connect(btn_ps, "clicked", G_CALLBACK(g_callback_mkdir_popup_open), NULL);
     g_signal_connect(btn_quit, "clicked", G_CALLBACK(g_callback_quit), NULL);
 
     gtk_box_pack_start(GTK_BOX(header_hbox), btn_mkdir, FALSE, FALSE, 5);
