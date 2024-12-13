@@ -91,19 +91,21 @@ void get_file_list(char *pwd, msg_data_t *data)
 
 int append_path(char *org_cwd, char *append, char* cwd, int mode)
 {
+    printf("%s, %s, %s\n", org_cwd, append, cwd);
     if (append[0] != '\0')
     {
         if (strcmp(append, "..") == 0)
         {
             // 최상위 ROOT 디렉토리를 벗어나면 
-            if(strcmp(org_cwd, ROOT_DIR) == 0 || strncmp(ROOT_DIR, org_cwd, strlen(ROOT_DIR)) != 0){
+            if(strcmp(org_cwd, ROOT_DIR) == 0 || strncmp(org_cwd, ROOT_DIR, strlen(ROOT_DIR)) != 0){
                 strncpy(cwd, org_cwd, MAX_PATH_LEN);
                 return 1;
             }
-            // printf("cwd:%s\n", cwd);
+            printf("cwd:%s\n", cwd);
+            // 경로의 마지막 디렉토리를 잘라내어 상위 경로로 이동 
             char* last_slash = strrchr(cwd, '/');
             *last_slash = '\0';
-            // printf("cwd:%s\n", cwd);
+            printf("cwd:%s\n", cwd);
         }
         else
         {
@@ -116,6 +118,7 @@ int append_path(char *org_cwd, char *append, char* cwd, int mode)
             return 1;
         }
     }else{
+
         if (mode == 0 && access(org_cwd, 0) == -1)
         {
             perror("access");

@@ -15,6 +15,10 @@ int cmd_ls_full(req_msg_t req, res_msg_t* res){
     //     printf("access failed!");
     //     return 1;
     // }
+    if(strncmp(req.args[0], ROOT_DIR, strlen(ROOT_DIR)) != 0){
+        perror("Can't access");
+        return 1;
+    }
     if(access(req.args[0], 0) == -1){
         perror("access: ls_full");
         return 1;

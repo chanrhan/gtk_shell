@@ -108,17 +108,23 @@ int g_callback_mvdir(GtkWidget* widget, gpointer data){
     move_full_directory(str);
 }
 
+char* gettok(int index){
+    int i = path_tok_map[index];
+    return path_tok[i];
+}
+
 int g_callback_mvdir_tok(GtkWidget* widget, gpointer data){
     int index = get_clicked_index(widget);
     int i=0;
     char mv_path[MAX_PATH_LEN];
     char* p = mv_path;
-    while(strcmp(path_tok[i], "") != 0 && i <= index){
+    char* tok;
+    while(strcmp((tok = gettok(i)), "") != 0 && i <= index){
         strcpy(p, "/");
         p += 1;
-        strcpy(p, path_tok[i]);
+        strcpy(p, tok);
         printf("p:%s\n", p);
-        p += strlen(path_tok[i]);
+        p += strlen(tok);
         // printf(" pp:%s\n", p);
         ++i;
     }

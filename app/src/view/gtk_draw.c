@@ -48,6 +48,7 @@ void update_path_token(){
     int size=0;
     char p[MAX_PATH_LEN];
     char show_text[MAX_PATH_LEN];
+    int insertIdx = 0;
 
     strcpy(p, cwd);
     printf("p:%s\n", p);
@@ -69,26 +70,26 @@ void update_path_token(){
     int i=0;
     while(i < size){
         printf("i:%d\n", i);
+        insertIdx = i;
         if(size >= MAX_PATH_TOKEN){
-            printf("size check:%d\n", i);
             if(i > 2 && i < size - MAX_PATH_TOKEN + 3){
-                printf("skip\n");
-            }else if(i == 2){
-                printf("...\n");
-                gtk_label_set_text(GTK_LABEL(path_tok_label[i]), "...");
-            }else if(i >= size - MAX_PATH_TOKEN + 3){
-                snprintf(show_text, MAX_PATH_LEN-1, "> %s", path_tok[i]);
-                printf("(%d) show_text:%s\n", i, show_text);
-                gtk_label_set_text(GTK_LABEL(path_tok_label[i-(size-MAX_PATH_TOKEN)]), show_text);
+                ++i;
+                continue;
             }
-            ++i;
-            continue;
-
+            
+            if(i == 2){
+                strcpy(show_text, "...");
+            }else{
+                snprintf(show_text, MAX_PATH_LEN-2, "> %s", path_tok[i]);
+                insertIdx = i-(size-MAX_PATH_TOKEN);
+            }
+        }else{
+            snprintf(show_text, MAX_PATH_LEN-2, "> %s", path_tok[i]);
         }
         
-        snprintf(show_text, MAX_PATH_LEN-1, "> %s", path_tok[i]);
-        printf("(%d) show_text:%s\n", i, show_text);
-        gtk_label_set_text(GTK_LABEL(path_tok_label[i]), show_text);
+        printf("(%d->%d) show_text:%s\n", i, insertIdx, show_text);
+        gtk_label_set_text(GTK_LABEL(path_tok_label[insertIdx]), show_text);
+        path_tok_map[insertIdx] = i;
         ++i;
     }
     while(i < MAX_PATH_TOKEN){

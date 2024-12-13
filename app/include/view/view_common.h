@@ -26,6 +26,7 @@ extern GtkLabel* dialog_label;
 extern GtkWidget* search_inp;
 extern GtkWidget* path_tok_label[MAX_PATH_TOKEN];
 extern char path_tok[32][MAX_PATH_LEN];
+extern int path_tok_map[10];
 
 extern char found_filename[MAX_PATH_LEN];
 

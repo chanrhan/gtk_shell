@@ -14,6 +14,7 @@ GtkWidget* search_inp;
 
 GtkWidget* path_tok_label[MAX_PATH_TOKEN];
 char path_tok[32][MAX_PATH_LEN];
+int path_tok_map[10];
 
 char found_filename[MAX_PATH_LEN];
 
