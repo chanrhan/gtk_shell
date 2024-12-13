@@ -28,6 +28,8 @@ DECLARE_CMDFUNC(kill); // MK_KILL
 DECLARE_CMDFUNC(search); // SEARCH
 DECLARE_CMDFUNC(cat); // SEARCH
 
+DECLARE_CMDFUNC(open_detail); // SEARCH
+
 
 
 // 구현 명령어 목록 

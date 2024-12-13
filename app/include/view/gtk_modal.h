@@ -17,6 +17,17 @@ typedef struct gtk_modal_file_info
     GtkWidget* btn_submit;
 } gtk_modal_file_info;
 
+typedef struct gtk_modal_file_detail
+{
+    int type;
+    GtkWidget* window;
+    GtkWidget* inp_filename;
+    GtkWidget* check_box_symbol;
+    GtkWidget* inp_error_label;
+    GtkWidget* perm_check_box[9];
+    GtkWidget* btn_close;
+} gtk_modal_file_detail;
+
 typedef struct gtk_context_menu_file_option{
     GtkMenu* menu;
     GtkWidget* item_rename;
@@ -39,7 +50,8 @@ typedef struct gtk_context_menu_dir_option{
 typedef struct gtk_context_menu_bg_option{
     GtkMenu* menu;
     GtkWidget* item_paste;
-    GtkWidget* item_create;
+    GtkWidget* item_create_dir;
+    GtkWidget* item_create_file;
     GtkWidget* item_open_terminal;
 } gtk_context_menu_bg_option;
 
@@ -50,6 +62,7 @@ typedef struct gtk_modal_text_editor{
 }gtk_modal_text_editor;
 
 gtk_modal_file_info md_mkdir;
+gtk_modal_file_detail md_file_detail;
 gtk_context_menu_file_option ctxm_file_option;
 gtk_context_menu_dir_option ctxm_dir_option;
 gtk_context_menu_bg_option ctxm_bg_option;

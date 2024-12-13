@@ -9,6 +9,8 @@ int move_directory(char* append);
 
 int move_full_directory(char* path);
 
+int show_process();
+
 
 #endif
 

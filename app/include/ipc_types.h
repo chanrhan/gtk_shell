@@ -4,6 +4,9 @@
 #define MSG_Q_REQ_PROJ_ID 101
 #define MSG_Q_RES_PROJ_ID 201
 
+#define DISPLAY_FILE 150
+#define DISPLAY_PROCESS 151
+
 #define CMD_LS 1 // ls
 #define CMD_LS_FULL 2 // entire directory
 #define CMD_PS 3
@@ -19,6 +22,7 @@
 #define CMD_RM_FILE 24 // 파일 삭제
 #define CMD_CH_FILE 25 // 파일 수정 
 #define CMD_CAT 26
+#define CMD_OPEN_FILE 27 // 파일 정보 열기
 
 #define CMD_EXEC 29 // 파일 실행 
 #define CMD_SEARCH 30
@@ -50,9 +54,11 @@
 
 typedef struct file_info_t{
     int type;
+    int size;
+    int perm;
     char name[MAX_PATH_LEN];
     char mtime[MTIME_LEN];
-    int size;
+    char birthtime[MTIME_LEN];
 } file_info_t;
 
 typedef struct msg_data_t{

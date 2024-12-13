@@ -42,3 +42,15 @@ int move_directory(char* path){
 
     return 0;
 }
+
+
+int show_process(){
+    req_msg_t req;
+    res_msg_t res;
+    req.cmd = CMD_PS;
+    send_wait_rcv(&req, &res);
+    if(res.status != STATUS_OK){
+        return 1;
+    }
+    
+}

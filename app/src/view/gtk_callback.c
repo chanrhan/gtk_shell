@@ -42,6 +42,7 @@ int g_callback_quit(GtkWidget* widget, gpointer data){
 int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer data){
     int index = get_clicked_index(widget);
     char* filename = file_list[index].name;
+    // printf("clicked:%d\n", index);
     
     if(event->type  == GDK_BUTTON_PRESS && event->button == 3){
         printf("right click\n");
@@ -61,10 +62,13 @@ int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer d
         }
         gtk_menu_popup_at_pointer(target_menu_context, (GdkEvent *)event);
     }else{
+         printf("111:%s\n", filename);
         if(filename[0] != '\0'){
+         printf("222\n");
             switch (file_list[index].type)
             {
             case 4:
+         printf("333\n");
                 move_directory(filename);
                 break;
             case 8:
@@ -99,6 +103,7 @@ int g_callback_mkdir_popup_open(GtkWidget* widget, gpointer data){
 
 // modify 
 int g_callback_file_info_open(GtkWidget* widget, gpointer data){
+    printf("read\n");
     edit_mode = EDIT_MODE_FILE;
     // selected_index = get_clicked_index(widget);
     gtk_widget_show_all(md_mkdir.window);
@@ -152,8 +157,12 @@ int g_callback_mvdir_tok(GtkWidget* widget, gpointer data){
 }
 
 gboolean on_realize(gpointer data){
-    printf("realize\n");
-    move_directory(NULL);
+    // printf("realize\n");
+    if(display_mode == DISPLAY_FILE){
+        move_directory(NULL);
+    }else if(display_mode == DISPLAY_PROCESS){
+        show_process();
+    }
     return FALSE;
 }
 
@@ -200,7 +209,7 @@ int g_callback_file_paste(GtkWidget* widget, gpointer data){
 }
 
 int g_callback_file_execute(GtkWidget* widget, gpointer data){
-    
+    execute_file(file_list[selected_index].name);
 }
 int g_callback_file_remove(GtkWidget* widget, gpointer data){
     remove_file(file_list[selected_index].name);

@@ -10,6 +10,8 @@
 extern int req_msg_q_id;
 extern int res_msg_q_id;
 
+extern int display_mode;
+
 extern char cwd[MAX_PATH_LEN];
 
 extern file_info_t file_list[MAX_FILE_LIST_SIZE];

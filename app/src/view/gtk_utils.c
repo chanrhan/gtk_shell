@@ -59,6 +59,8 @@ int write_file(){
     }else{
         show_dialog_text("File Create Failed");
     }
+    strcpy(md_text_editor.filename, "");
+    strcpy(md_mkdir.inp_filename, "");
     g_free(text); // gtk_text_view_get_buffer로 가져온 gchar 텍스트는 반드시! g_free로 해제시켜줘야함
     gtk_widget_hide(md_text_editor.window);
 }
@@ -295,7 +297,22 @@ int paste_file(){
 
 
 int execute_file(char* filename){
+    printf("execute:%s\n", filename);
+    req_msg_t req;
+    res_msg_t res;
 
+    req.cmd = CMD_EXEC;
+
+    strncpy(req.args[0], filename, MAX_ARGV_SIZE);
+
+
+    int len = send_wait_rcv(&req, &res);
+    if(len >= 0){
+         show_dialog_text("File Execute Success");
+        // update_file_list(res);
+    }else{
+         show_dialog_text("File Execute Failed");
+    }
 }
 
 int link_file(){

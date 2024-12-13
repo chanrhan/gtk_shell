@@ -23,6 +23,8 @@ int edit_mode = 0;
 int copy_mode = -1;
 int file_list_size = 0;
 
+int display_mode = DISPLAY_FILE;
+
 void init(){
     
 }
