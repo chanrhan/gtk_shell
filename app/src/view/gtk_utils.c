@@ -281,9 +281,13 @@ int search_file(){
     strncpy(req.args[0], text, MAX_ARGV_SIZE);
 
     int len = send_wait_rcv(&req, &res);
-    if(len >= 0)
+    if(len >= 0){
         update_current_working_directory(res.cwd);
         strncpy(found_filename, res.find, MAX_PATH_LEN);
+        printf("found:%s\n", found_filename);
         update_file_list(res);
+    }else{
+        strcpy(found_filename, "");
+    }
     
 }
