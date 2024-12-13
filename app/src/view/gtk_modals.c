@@ -225,9 +225,64 @@ void init_mkdir_modal(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_mkdir.btn_close, TRUE, TRUE, 5);
 }
 
+void init_text_editor_modal(GtkWidget* parent){
+    int MAX_WIDTH = 600;
+    int MAX_HEIGHT = 400;
+    // add_btn
+    md_text_editor.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(md_text_editor.window), "Text Editor");
+    gtk_window_set_position(GTK_WINDOW(md_text_editor.window), GTK_WIN_POS_CENTER);
+    gtk_window_set_default_size(GTK_WINDOW(md_text_editor.window), MAX_WIDTH, MAX_HEIGHT);
+    
+    gtk_window_set_transient_for(GTK_WINDOW(md_text_editor.window), GTK_WINDOW(parent));
+    gtk_window_set_modal(GTK_WINDOW(md_text_editor.window), TRUE);
+
+    // layout
+    GtkWidget* vbox, *func_vbox, *ctrl_hbox;
+    vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(md_text_editor.window), vbox);
+
+    func_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_size_request(func_vbox, MAX_WIDTH, 350);
+
+    ctrl_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_set_size_request(ctrl_hbox, MAX_WIDTH, 50);
+
+    gtk_box_pack_start(GTK_BOX(vbox), func_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), ctrl_hbox, TRUE, TRUE, 0);
+
+    // func_vbox
+    GtkWidget* scrolled_window, *text_vbox;
+    scrolled_window = gtk_scrolled_window_new(NULL, NULL);
+    gtk_widget_set_size_request(scrolled_window, MAX_WIDTH, 300);
+    gtk_container_add(GTK_CONTAINER(func_vbox), scrolled_window);
+    
+    text_vbox =  gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // gtk_widget_set_size_request(text_vbox, MAX_WIDTH, 350);
+    gtk_container_add(GTK_CONTAINER(scrolled_window), text_vbox);
+    
+    md_text_editor.textview = gtk_text_view_new();
+    gtk_box_pack_start(GTK_BOX(text_vbox), md_text_editor.textview, TRUE, TRUE, 0);
+
+    gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(md_text_editor.textview), GTK_WRAP_WORD);
+
+
+    // ctrl_box
+    GtkWidget* btn_close, *btn_submit;
+    btn_close = gtk_button_new_with_label("취소");
+    btn_submit = gtk_button_new_with_label("생성");
+    g_signal_connect(btn_close, "clicked", G_CALLBACK(on_popup_close), md_text_editor.window);
+    g_signal_connect(btn_submit, "clicked", G_CALLBACK(g_callback_submit_mkfile), NULL);
+
+    gtk_box_pack_start(GTK_BOX(ctrl_hbox), btn_submit, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(ctrl_hbox), btn_close, TRUE, TRUE, 5);
+
+}
+
 void init_modal(GtkWidget* parent){
     init_mkdir_modal(parent);
     init_file_menu_context(parent);
     init_dir_menu_context(parent);
     init_bg_menu_context(parent);
+    init_text_editor_modal(parent);
 }

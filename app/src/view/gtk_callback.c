@@ -61,9 +61,20 @@ int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer d
         }
         gtk_menu_popup_at_pointer(target_menu_context, (GdkEvent *)event);
     }else{
-        if(filename[0] != '\0' && file_list[index].type == 4){
-            move_directory(filename);
+        if(filename[0] != '\0'){
+            switch (file_list[index].type)
+            {
+            case 4:
+                move_directory(filename);
+                break;
+            case 8:
+                read_file(filename);
+                break;
+            default:
+                break;
+            }
         }
+        
         selected_index = -1;
     }
 
@@ -88,12 +99,17 @@ int g_callback_mkdir_popup_open(GtkWidget* widget, gpointer data){
 
 // modify 
 int g_callback_file_info_open(GtkWidget* widget, gpointer data){
-    selected_index = get_clicked_index(widget);
+    edit_mode = EDIT_MODE_FILE;
+    // selected_index = get_clicked_index(widget);
     gtk_widget_show_all(md_mkdir.window);
 }
 
 int g_callback_dir_info_open(GtkWidget* widget, gpointer data){
     gtk_widget_show_all(md_mkdir.window);
+}
+
+int g_callback_submit_mkfile(GtkWidget* widget, gpointer data){
+    write_file();
 }
 
 

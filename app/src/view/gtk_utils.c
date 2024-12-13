@@ -4,10 +4,6 @@
 #include "ipc_view.h"
 #include "view_func.h"
 
-int make_file(){
-
-}
-
 int submit_file_info(){
     switch (edit_mode)
     {
@@ -20,11 +16,49 @@ int submit_file_info(){
         case EDIT_MODE_LINK:
             link_file();
             break;
+        case EDIT_MODE_FILE:
+            open_text_editor();
+            break;
         default:
             break;
     }
     gtk_widget_hide(md_mkdir.window);
 }
+
+int open_text_editor(){
+    char* filename = gtk_entry_get_text(GTK_ENTRY(md_mkdir.inp_filename));
+    strncpy(md_text_editor.filename, filename, 64);
+    gtk_widget_show_all(md_text_editor.window);
+}
+
+int write_file(){
+     char* filename = &md_text_editor.filename;
+     GtkTextBuffer *buffer;
+    GtkTextIter start, end;
+    gchar *text;
+
+    // GTK에서는 textview에서 buffer를 통해 전체 텍스트를 가져올 수 있다. 
+    buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(md_text_editor.textview));
+    gtk_text_buffer_get_bounds(buffer, &start, &end); 
+    text = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+
+    printf("(%d)text:%s\n", strlen(text), text);
+    
+    txb_msg_t req;
+    txb_msg_t res;
+
+    req.cmd = CMD_WRITE_FILE;
+    snprintf(req.filename, MAX_PATH_LEN, "%s/%s", cwd, filename);
+    strncpy(req.buffer, text, MAX_TEXT_BUF_SIZE);
+
+    int len = send_wait_rcv_txb(&req, &res);
+    if(len >= 0){
+        move_directory(NULL);
+    }
+    g_free(text); // gtk_text_view_get_buffer로 가져온 gchar 텍스트는 반드시! g_free로 해제시켜줘야함
+    gtk_widget_hide(md_text_editor.window);
+}
+
 
 int make_dir(){
     int perm = 0;
@@ -56,6 +90,21 @@ int make_dir(){
         update_file_list(res);
     }else{
         show_dialog_text("Directory Create Failed");
+    }
+}
+
+int read_file(char* filename){
+    txb_msg_t req;
+    txb_msg_t res;
+
+    req.cmd = CMD_READ_FILE;
+    snprintf(req.filename, MAX_PATH_LEN, "%s/%s", cwd, filename);
+
+    int len = send_wait_rcv_txb(&req, &res);
+    if(len >= 0){
+        gtk_widget_show_all(md_text_editor.window);
+        GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(md_text_editor.textview));
+        gtk_text_buffer_set_text(buffer, res.buffer, -1);
     }
 }
 
