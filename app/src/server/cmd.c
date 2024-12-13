@@ -2,6 +2,7 @@
 
 cmd_t cmd_list[] = {
     {CMD_LS, cmd_ls},
+    {CMD_LS_FULL, cmd_ls_full},
     {CMD_MK_DIR, cmd_mkdir}, 
     {CMD_MK_FILE, cmd_mkfile},
     {CMD_MK_LN, cmd_mkln},

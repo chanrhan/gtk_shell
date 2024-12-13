@@ -43,9 +43,67 @@ void update_file_list(res_msg_t res){
     }
 }
 
-void set_text_current_dir(char* new_cwd){
+void update_path_token(){
+    printf("update path toekn\n");
+    int size=0;
+    char p[MAX_PATH_LEN];
+    char show_text[MAX_PATH_LEN];
+
+    strcpy(p, cwd);
+    printf("p:%s\n", p);
+
+    char* tok = strtok(p, "/");
+    strncpy(path_tok[size], tok, MAX_PATH_LEN);
+    ++size;
+
+    while(1){
+        tok = strtok(NULL, "/");
+        printf("(%d) tok:%s\n", size, tok);
+        if(tok == NULL){
+            break;
+        }
+        strncpy(path_tok[size], tok, MAX_PATH_LEN);
+        ++size;
+    }
+    printf("size:%d\n", size);
+    int i=0;
+    while(i < size){
+        printf("i:%d\n", i);
+        if(size >= MAX_PATH_TOKEN){
+            printf("size check:%d\n", i);
+            if(i > 2 && i < size - MAX_PATH_TOKEN + 3){
+                printf("skip\n");
+            }else if(i == 2){
+                printf("...\n");
+                gtk_label_set_text(GTK_LABEL(path_tok_label[i]), "...");
+            }else if(i >= size - MAX_PATH_TOKEN + 3){
+                snprintf(show_text, MAX_PATH_LEN-1, "> %s", path_tok[i]);
+                printf("(%d) show_text:%s\n", i, show_text);
+                gtk_label_set_text(GTK_LABEL(path_tok_label[i-(size-MAX_PATH_TOKEN)]), show_text);
+            }
+            ++i;
+            continue;
+
+        }
+        
+        snprintf(show_text, MAX_PATH_LEN-1, "> %s", path_tok[i]);
+        printf("(%d) show_text:%s\n", i, show_text);
+        gtk_label_set_text(GTK_LABEL(path_tok_label[i]), show_text);
+        ++i;
+    }
+    while(i < MAX_PATH_TOKEN){
+        // printf("clear:%d\n", i);
+        strcpy(path_tok[i], "");
+        gtk_label_set_text(GTK_LABEL(path_tok_label[i]), "");
+        ++i;
+    }
+    printf("cwd:%s\n", cwd);
+}
+
+void update_current_working_directory(char* new_cwd){
     strncpy(cwd, new_cwd, MAX_PATH_LEN);
-    gtk_label_set_text(GTK_LABEL(dir_text), cwd);
+    // gtk_label_set_text(GTK_LABEL(dir_text), cwd);
+    update_path_token();
 }
 
 GtkWidget *create_gtk_main_window()
@@ -175,12 +233,25 @@ void build_layout(GtkWidget* window){
     GtkWidget* btn_mvdir_downloads;
     GtkWidget* btn_mvdir_documents;
 
+    btn_mvdir_desktop = gtk_button_new_with_label("Desktop");
+    btn_mvdir_downloads = gtk_button_new_with_label("Downloads");
+    btn_mvdir_documents = gtk_button_new_with_label("Documents");
+
+    g_signal_connect(btn_mvdir_desktop, "clicked", G_CALLBACK(g_callback_mvdir), "/tmp/test/desktop");
+    g_signal_connect(btn_mvdir_downloads, "clicked", G_CALLBACK(g_callback_mvdir), "/tmp/test/downloads");
+    g_signal_connect(btn_mvdir_documents, "clicked", G_CALLBACK(g_callback_mvdir), "/tmp/test/documents");
+
+    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_desktop, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_downloads, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_documents, TRUE, TRUE, 0);
+
+
     // content_box_v :
-    GtkWidget* dir_vbox, *search_hbox, *list_header_label, *list_vbox;
-    dir_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(dir_vbox, 850, 50);
+    GtkWidget* dir_hbox, *search_hbox, *list_header_label, *list_vbox;
+    dir_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_set_size_request(dir_hbox, 850, 50);
     // gtk_widget_set_name(dir_vbox, "dir_box");
-     gtk_style_class_toggle(dir_vbox, "dir_box", TRUE);
+     gtk_style_class_toggle(dir_hbox, "dir_box", TRUE);
 
     search_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_size_request(search_hbox, 850, 50);
@@ -194,16 +265,36 @@ void build_layout(GtkWidget* window){
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_widget_set_size_request(scrolled_window, 850, 550);
 
-    gtk_box_pack_start(GTK_BOX(content_vbox), dir_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(content_vbox), dir_hbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(content_vbox), search_hbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(content_vbox), list_header_label, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(content_vbox), scrolled_window, TRUE, TRUE, 0);
 
     // dir_box_h
-    dir_text = gtk_label_new(cwd);
-    //  gtk_widget_set_name(dir_text, "dir_text");
-     gtk_style_class_toggle(dir_text, "dir_text", TRUE);
-    gtk_box_pack_start(GTK_BOX(dir_vbox), dir_text, FALSE, FALSE, 0);
+    // dir_text = gtk_label_new(cwd);
+    // //  gtk_widget_set_name(dir_text, "dir_text");
+    //  gtk_style_class_toggle(dir_text, "dir_text", TRUE);
+    // gtk_box_pack_start(GTK_BOX(dir_hbox), dir_text, FALSE, FALSE, 0);
+
+    int* index;
+    for(int i=0;i<MAX_PATH_TOKEN;++i){
+        GtkWidget* event_box = gtk_event_box_new();
+        // gtk_widget_set_name(event_box, "file_info_text");
+        //  gtk_style_class_toggle(event_box, "file_item_box", TRUE);
+
+        path_tok_label[i] = gtk_label_new("");
+        // gtk_style_class_toggle(path_tok_label[i], "file_item_text", TRUE);
+        gtk_label_set_xalign(GTK_LABEL(path_tok_label[i]), 0.0);
+        gtk_container_add(GTK_CONTAINER(event_box), path_tok_label[i]);
+
+        index = g_new(int, 1);
+        *index = i;
+        g_object_set_data(G_OBJECT(event_box), "index", index);
+
+        g_signal_connect(event_box, "button-press-event", G_CALLBACK(g_callback_mvdir_tok), NULL);
+
+        gtk_box_pack_start(GTK_BOX(dir_hbox), event_box, FALSE, FALSE, 10);
+    }
 
     // search_hbox
     search_inp = gtk_entry_new();
@@ -223,7 +314,7 @@ void build_layout(GtkWidget* window){
      gtk_style_class_toggle(list_vbox, "list_box", TRUE);
 
     gtk_container_add(GTK_CONTAINER(scrolled_window), list_vbox);
-    int* index;
+    // int* index;
     printf("label build..\n");
     for(int i=0;i<MAX_FILE_LIST_SIZE;++i){
         GtkWidget* event_box = gtk_event_box_new();

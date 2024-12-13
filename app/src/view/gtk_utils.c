@@ -282,7 +282,7 @@ int search_file(){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0)
-        set_text_current_dir(res.cwd);
+        update_current_working_directory(res.cwd);
         strncpy(found_filename, res.find, MAX_PATH_LEN);
         update_file_list(res);
     

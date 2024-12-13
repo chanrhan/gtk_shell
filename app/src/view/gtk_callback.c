@@ -72,7 +72,7 @@ int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer d
 
 int g_callback_mkdir_popup_open(GtkWidget* widget, gpointer data){
     edit_mode = EDIT_MODE_MAKE;
-    gtk_window_set_title(GTK_WINDOW(md_mkdir.window), "MAKE DIRECTORY");
+    gtk_window_set_title(GTK_WINDOW(md_mkdir.window), "CREATE DIRECTORY");
     // printf("menu open\n");
     int bit[9] = {1,1,1,1,1,1,1,1,1};
     for(int i=0;i<9;++i){
@@ -102,8 +102,27 @@ int g_callback_mkdir_popup_submit(GtkWidget* widget, gpointer data){
     return TRUE;
 }
 
-int g_callback_mvdir_toolbar(GtkWidget* widget, gpointer data){
-    
+int g_callback_mvdir(GtkWidget* widget, gpointer data){
+    char* str = (char*)data;
+    printf("mv:%s\n", str);
+    move_full_directory(str);
+}
+
+int g_callback_mvdir_tok(GtkWidget* widget, gpointer data){
+    int index = get_clicked_index(widget);
+    int i=0;
+    char mv_path[MAX_PATH_LEN];
+    char* p = mv_path;
+    while(strcmp(path_tok[i], "") != 0 && i <= index){
+        strcpy(p, "/");
+        p += 1;
+        strcpy(p, path_tok[i]);
+        printf("p:%s\n", p);
+        p += strlen(path_tok[i]);
+        // printf(" pp:%s\n", p);
+        ++i;
+    }
+    move_full_directory(mv_path);
 }
 
 gboolean on_realize(gpointer data){

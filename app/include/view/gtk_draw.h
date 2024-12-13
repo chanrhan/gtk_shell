@@ -3,7 +3,7 @@
 
 #include "view_common.h"
 
-void set_text_current_dir(char* new_cwd);
+void update_current_working_directory(char* new_cwd);
 
 void update_file_list(res_msg_t res);
 

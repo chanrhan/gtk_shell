@@ -24,6 +24,8 @@ extern int copy_mode; // copy or move
 extern GtkWidget* copied_file_label;
 extern GtkLabel* dialog_label;
 extern GtkWidget* search_inp;
+extern GtkWidget* path_tok_label[MAX_PATH_TOKEN];
+extern char path_tok[32][MAX_PATH_LEN];
 
 extern char found_filename[MAX_PATH_LEN];
 

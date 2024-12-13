@@ -12,6 +12,9 @@ GtkWidget* copied_file_label;
 GtkLabel* dialog_label;
 GtkWidget* search_inp;
 
+GtkWidget* path_tok_label[MAX_PATH_TOKEN];
+char path_tok[32][MAX_PATH_LEN];
+
 char found_filename[MAX_PATH_LEN];
 
 int selected_index = 0;

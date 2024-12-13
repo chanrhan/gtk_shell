@@ -7,6 +7,7 @@
 
 // 명령어 구현 함수 선언
 DECLARE_CMDFUNC(ls); 
+DECLARE_CMDFUNC(ls_full); 
 
 DECLARE_CMDFUNC(mkdir); // MK_DIR
 DECLARE_CMDFUNC(mkfile); // MK_FILE

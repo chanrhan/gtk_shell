@@ -5,7 +5,8 @@
 #define MSG_Q_RES_PROJ_ID 201
 
 #define CMD_LS 1 // ls
-#define CMD_PS 2
+#define CMD_LS_FULL 2 // entire directory
+#define CMD_PS 3
 
 #define CMD_MK_DIR 10 // \ud3f4\ub354 \uc0dd\uc131
 #define CMD_MK_FILE 11 // \ud30c\uc77c \uc0dd\uc131 (cat)

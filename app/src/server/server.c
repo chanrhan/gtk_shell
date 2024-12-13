@@ -46,6 +46,27 @@ int main(int argc, char **argv)
         }
     }
 
+    if(access("/tmp/test/desktop",0) == -1){
+        int rst = mkdir("/tmp/test/desktop",0755);
+        if(rst){
+            return 1;
+        }
+    }
+
+    if(access("/tmp/test/documents",0) == -1){
+        int rst = mkdir("/tmp/test/documents",0755);
+        if(rst){
+            return 1;
+        }
+    }
+
+    if(access("/tmp/test/downloads",0) == -1){
+        int rst = mkdir("/tmp/test/downloads",0755);
+        if(rst){
+            return 1;
+        }
+    }
+
     // 프로그램을 시작하자마자 최상위 디렉토리로 이동하도록 설정 
     // ROOT_DIR = "/tmp/test";
     // if(chdir(ROOT_DIR) != 0){

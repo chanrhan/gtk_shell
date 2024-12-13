@@ -16,7 +16,8 @@ DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
 DECLARE_GTK_CALLBACK(mkdir_popup_submit);
 
 
-DECLARE_GTK_CALLBACK(mvdir_toolbar);
+DECLARE_GTK_CALLBACK(mvdir);
+DECLARE_GTK_CALLBACK(mvdir_tok);
 
 // menu: file option
 DECLARE_GTK_CALLBACK(file_copy);
