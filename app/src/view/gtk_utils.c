@@ -44,14 +44,14 @@ int write_file(){
 
     printf("(%d)text:%s\n", strlen(text), text);
     
-    txb_msg_t req;
-    txb_msg_t res;
+    req_msg_t req;
+    res_msg_t res;
 
-    req.cmd = CMD_WRITE_FILE;
-    snprintf(req.filename, MAX_PATH_LEN, "%s/%s", cwd, filename);
-    strncpy(req.buffer, text, MAX_TEXT_BUF_SIZE);
+    req.cmd = CMD_MK_FILE;
+    strncpy(req.args[0], filename, MAX_PATH_LEN);
+    strncpy(req.text_buf, text, MAX_TXB_SIZE);
 
-    int len = send_wait_rcv_txb(&req, &res);
+    int len = send_wait_rcv(&req, &res);
     if(len >= 0){
         move_directory(NULL);
     }
@@ -94,17 +94,17 @@ int make_dir(){
 }
 
 int read_file(char* filename){
-    txb_msg_t req;
-    txb_msg_t res;
+    req_msg_t req;
+    res_msg_t res;
 
-    req.cmd = CMD_READ_FILE;
-    snprintf(req.filename, MAX_PATH_LEN, "%s/%s", cwd, filename);
+    req.cmd = CMD_CAT;
+    strncpy(req.args[0], filename, MAX_PATH_LEN);
 
-    int len = send_wait_rcv_txb(&req, &res);
+    int len = send_wait_rcv(&req, &res);
     if(len >= 0){
         gtk_widget_show_all(md_text_editor.window);
         GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(md_text_editor.textview));
-        gtk_text_buffer_set_text(buffer, res.buffer, -1);
+        gtk_text_buffer_set_text(buffer, res.text_buf, -1);
     }
 }
 

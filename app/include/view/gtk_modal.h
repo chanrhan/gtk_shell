@@ -43,10 +43,17 @@ typedef struct gtk_context_menu_bg_option{
     GtkWidget* item_open_terminal;
 } gtk_context_menu_bg_option;
 
+typedef struct gtk_modal_text_editor{
+    GtkWidget* window;
+    char filename[MAX_PATH_LEN];
+    GtkWidget* textview;
+}gtk_modal_text_editor;
+
 gtk_modal_file_info md_mkdir;
 gtk_context_menu_file_option ctxm_file_option;
 gtk_context_menu_dir_option ctxm_dir_option;
 gtk_context_menu_bg_option ctxm_bg_option;
+gtk_modal_text_editor md_text_editor;
 
 void init_modal(GtkWidget* parent);
 

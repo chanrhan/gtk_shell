@@ -7,6 +7,12 @@ int search_file();
 
 int submit_file_info();
 
+int write_file();
+
+int open_text_editor();
+
+int read_file();
+
 int make_dir();
 
 int make_file();

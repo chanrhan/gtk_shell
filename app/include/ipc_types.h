@@ -18,8 +18,9 @@
 #define CMD_RM_DIR 23 // 폴더 삭제 
 #define CMD_RM_FILE 24 // 파일 삭제
 #define CMD_CH_FILE 25 // 파일 수정 
-#define CMD_EXEC 27 // 파일 실행 
+#define CMD_CAT 26
 
+#define CMD_EXEC 29 // 파일 실행 
 #define CMD_SEARCH 30
 
 #define CMD_KILL 40
@@ -43,6 +44,8 @@
 // #define MAX_FILENAME_SIZE 64
 #define MTIME_LEN 9
 
+#define MAX_TXB_SIZE 1
+
 // extern long SYSTEM_MSGMAX;
 
 typedef struct file_info_t{
@@ -62,6 +65,7 @@ typedef struct req_msg_t{
     int cmd;
     char cwd[MAX_PATH_LEN];
     char args[4][MAX_ARGV_SIZE];
+    char text_buf[MAX_TXB_SIZE];
 } req_msg_t;
 
 typedef struct res_msg_t{
@@ -71,6 +75,7 @@ typedef struct res_msg_t{
     char cwd[MAX_PATH_LEN];
     char find[MAX_PATH_LEN];
     msg_data_t data;
+    char text_buf[MAX_TXB_SIZE];
 } res_msg_t;
 
 #endif

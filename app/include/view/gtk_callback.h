@@ -14,6 +14,7 @@ DECLARE_GTK_CALLBACK(file_info_open);
 // modal
 DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
 DECLARE_GTK_CALLBACK(mkdir_popup_submit);
+DECLARE_GTK_CALLBACK(submit_mkfile);
 
 
 DECLARE_GTK_CALLBACK(mvdir);
