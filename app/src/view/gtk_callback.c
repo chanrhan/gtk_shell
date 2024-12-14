@@ -19,11 +19,15 @@ int g_callback_change_display_mode(GtkWidget* widget, gpointer data){
 }
 
 gboolean on_enter_notify_path_tok(GtkWidget *widget, GdkEventCrossing *event, gpointer data){
-    gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
+    if(display_mode == FILE_DISPLAY_MODE){
+        gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
+    }
 }
 
 gboolean on_leave_notify_path_tok(GtkWidget *widget, GdkEventCrossing *event, gpointer data){
-     gtk_widget_unset_state_flags(widget, GTK_STATE_FLAG_PRELIGHT);
+    if(display_mode == FILE_DISPLAY_MODE){
+        gtk_widget_unset_state_flags(widget, GTK_STATE_FLAG_PRELIGHT);
+    }
 }
 
 // hover in

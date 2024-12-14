@@ -12,13 +12,16 @@ void update_file_list(res_msg_t res){
     }
     char* text;
     int i=0;
-    // printf("(%s)update: %d\n", cwd, file_list_size);
     while(i < file_list_size){
-        // printf("[%d]: %s|%d|%s|%d|\n", i, file_list[i].name, file_list[i].type, file_list[i].mtime, file_list[i].size);
+        if(strcmp(file_list[i].name, "..") == 0){
+            gtk_label_set_text(GTK_LABEL(label_data[i]), "  ..");
+            ++i;
+            continue;
+        }
         text = (char*)malloc(128);
-        snprintf(text, 128, "\t%-40s%-4d%4s%4d", file_list[i].name, file_list[i].type, file_list[i].mtime, file_list[i].size);
+        snprintf(text, 128, "  %-30s%-4d%4s%4d", file_list[i].name, file_list[i].type, file_list[i].mtime, file_list[i].size);
         // printf("label:%s\n", text);
-
+        
         // printf("(%d).\n", i);
         gtk_label_set_text(GTK_LABEL(label_data[i]), text);
         
@@ -71,7 +74,7 @@ void update_process_list(res_msg_t res){
             strcpy(buf[k], "");
         }
         strcpy(file_list[i].name, buf[0]); // pid를 파일 name 필드에 저장 
-        snprintf(text, 128, "%10s%10s%10s%10s%10s%10s", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
+        snprintf(text, 128, "%5s%5s%5s%5s%5s%5s", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
         gtk_label_set_text(GTK_LABEL(label_data[i]), text);
     }
     for(;i<MAX_FILE_LIST_SIZE;++i){

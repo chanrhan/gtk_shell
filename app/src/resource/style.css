@@ -81,7 +81,7 @@ button{
 }
 
 .body .content_box .dir_cont .path_tok:hover{
-    color: #45dc2e;
+    color: #ff2424;
 }
 
 .body .content_box .search_cont{
@@ -112,6 +112,11 @@ button{
 
 .body .content_box .list_box .file_item:hover{
     background-color: #7cbce9;
+}
+
+.body .content_box .list_box .file_item .file_info_text{
+    text-align: left;
+    
 }
 
 .cut{
