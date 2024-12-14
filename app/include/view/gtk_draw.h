@@ -3,6 +3,9 @@
 
 #include "view_common.h"
 
+void set_clipboard(char* text);
+void clear_clipboard();
+
 void update_current_working_directory(char* new_cwd);
 
 void update_file_list(res_msg_t res);

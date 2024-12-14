@@ -27,7 +27,7 @@ void update_file_list(res_msg_t res){
         
         char tp[MAX_PATH_LEN];
         snprintf(tp, MAX_PATH_LEN, "%s/%s", cwd, file_list[i].name);
-        if(strcmp(copied_file.name, tp) == 0){
+        if(copy_mode == 1 && strcmp(copied_file.name, tp) == 0){
                 gtk_style_class_toggle(label_data[i], "cut", TRUE);
         }else{
             gtk_style_class_toggle(label_data[i], "cut", FALSE);
@@ -146,6 +146,21 @@ void update_current_working_directory(char* new_cwd){
     strncpy(cwd, new_cwd, MAX_PATH_LEN);
     // gtk_label_set_text(GTK_LABEL(dir_text), cwd);
     update_path_token();
+}
+
+void set_clipboard(char* text){
+    gtk_label_set_text(GTK_LABEL(copied_file_label), text);
+    gtk_style_class_toggle(copied_file_label, "copied", TRUE);
+}
+
+void clear_clipboard(){
+    strcpy(copied_file.mtime, "");
+    strcpy(copied_file.name, "");
+    copied_file.size = -1;
+    copied_file.type = -1;
+    copy_mode = -1;
+    gtk_label_set_text(GTK_LABEL(copied_file_label), "");
+    gtk_style_class_toggle(copied_file_label, "copied", FALSE);
 }
 
 GtkWidget *create_gtk_main_window()
@@ -426,9 +441,18 @@ void build_layout(GtkWidget* window){
     gtk_box_pack_start(GTK_BOX(clipboard_hbox), clip_title, TRUE, TRUE, 0);
 
     copied_file_label = gtk_label_new("");
-    gtk_widget_set_size_request(copied_file_label, 800, 30);
+    gtk_widget_set_size_request(copied_file_label, 750, 30);
     gtk_style_class_toggle(copied_file_label, "clipboard_text", TRUE);
     gtk_box_pack_start(GTK_BOX(clipboard_hbox), copied_file_label, TRUE, TRUE, 0);
+
+    GtkWidget* btn_clear_clipboard;
+    btn_clear_clipboard = gtk_button_new_with_label("Clear");
+    gtk_widget_set_size_request(btn_clear_clipboard, 50, 30);
+    gtk_style_class_toggle(btn_clear_clipboard, "btn_clear_clipboard", TRUE);
+     g_signal_connect(btn_clear_clipboard, "clicked", G_CALLBACK(g_callback_clear_clipboard), NULL);
+
+
+    gtk_box_pack_start(GTK_BOX(clipboard_hbox), btn_clear_clipboard, TRUE, TRUE, 0);
     
     dialog_label = gtk_label_new("");
     // gtk_widget_set_name(dialog_label, "dialog_label");

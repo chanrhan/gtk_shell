@@ -3,6 +3,7 @@
 #include "gtk_utils.h"
 #include "view_func.h"
 #include "ipc_view.h"
+#include "gtk_draw.h"
 
 int get_clicked_index(GtkWidget* widget){
     int *index = (int *)g_object_get_data(G_OBJECT(widget), "index");
@@ -254,4 +255,8 @@ int g_callback_search_file(GtkWidget* widget, gpointer data){
 
 int g_callback_search_inp_changed(GtkWidget* widget, gpointer data){
     strcpy(found_filename, "");
+}
+
+int g_callback_clear_clipboard(GtkWidget* widget, gpointer data){
+    clear_clipboard();
 }

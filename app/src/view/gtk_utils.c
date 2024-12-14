@@ -272,7 +272,7 @@ int move_file(){
     copy_mode = 1;
     gtk_style_class_toggle(label_data[selected_index], "cut", TRUE);
 
-    gtk_label_set_text(GTK_LABEL(copied_file_label), text);
+    set_clipboard(text);
     inform_dialog("File Selected");
 }
 
@@ -300,7 +300,7 @@ int copy_file(){
     snprintf(text, 64, "%4s%4d%4d%4s", copied_file.name, copied_file.type, copied_file.size, copied_file.mtime);
 
     copy_mode = 0;
-    gtk_label_set_text(GTK_LABEL(copied_file_label), text);
+    set_clipboard(text);
     inform_dialog("File Copied");
 }
 
@@ -354,10 +354,7 @@ int paste_file(){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        strcpy(copied_file.mtime, "");
-        strcpy(copied_file.name, "");
-        copied_file.size = -1;
-        copied_file.type = -1;
+        clear_clipboard();
         inform_dialog("Paste Success Success");
         update_file_list(res);
     }else{

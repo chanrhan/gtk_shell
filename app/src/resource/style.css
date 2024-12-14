@@ -153,6 +153,10 @@ button{
     transition: all 0.5s ease-in-out;
 }
 
+.copied{
+    background-color: rgb(250, 244, 127);
+}
+
 .footer .msg_text{
     font-size: 28px;
 }
