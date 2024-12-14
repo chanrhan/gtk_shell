@@ -153,27 +153,26 @@ int write_file(){
 
 
 int make_dir(){
-    int perm = 0;
     int file_type = 0;
     char* filename = gtk_entry_get_text(GTK_ENTRY(md_mkdir.inp_filename));
     if(filename[0] == '\0'){
         gtk_label_set_text(md_mkdir.inp_error_label, "invalid filename");
         return TRUE;
     }
-    for(int i=0;i<9;++i){
-        if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(md_mkdir.perm_check_box[i]))){
-            perm |= (1 << i);
-        }
-    }
+    // for(int i=0;i<9;++i){
+    //     if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(md_mkdir.perm_check_box[i]))){
+    //         perm |= (1 << i);
+    //     }
+    // }
 
-    printf("type:%d,filename:%s,perm:%d,\n", file_type, filename, perm);
+    printf("type:%d,filename:%s\n", file_type, filename);
 
     req_msg_t req;
     res_msg_t res;
 
     req.cmd = CMD_MK_DIR;
     strncpy(req.args[0], filename, MAX_ARGV_SIZE);
-    sprintf(req.args[1], "%d",perm);
+    // sprintf(req.args[1], "%d",perm);
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
@@ -317,8 +316,8 @@ int paste_file(){
     char* source = &copied_file.name;
     
     strncpy(req.args[0], source, MAX_ARGV_SIZE);
-    // printf("args0:%s, source:%s, org:%s\n", req.args[0], source, copied_file.name);
 
+    // 파일명만 따로 분리
     char* filename = strrchr(source, '/');
     if(filename == NULL){
         filename = source;
@@ -327,6 +326,7 @@ int paste_file(){
     }
     char dest[MAX_PATH_LEN];
     snprintf(dest, MAX_PATH_LEN, "%s/%s", cwd, filename);
+    printf("paste:%s->%s\n", source, dest);
     
     // 폴더 복사할 경우, 해당 폴더를 폴더 내에 복사하는 상황 방지 
     if(copied_file.type ==4 && strncmp(source, dest, strlen(source)) == 0){
@@ -334,10 +334,10 @@ int paste_file(){
         return 1;
     }
     
-    if(copy_mode == 0){
+    if(copied_file.type == 8 && copy_mode == 0){
         char* p = strrchr(dest, '.');
         if(p == NULL){
-            p += strlen(dest);    
+            p = dest + strlen(dest);    
         }
         // printf("p:%s, len:%d\n", p, strlen(p));
         // snprintf(dest, strlen(dest)+strlen(p)+5, "");
@@ -354,12 +354,10 @@ int paste_file(){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        if(copy_mode == 1){
-            strcpy(copied_file.mtime, "");
-            strcpy(copied_file.name, "");
-            copied_file.size = -1;
-            copied_file.type = -1;
-        }
+        strcpy(copied_file.mtime, "");
+        strcpy(copied_file.name, "");
+        copied_file.size = -1;
+        copied_file.type = -1;
         inform_dialog("Paste Success Success");
         update_file_list(res);
     }else{

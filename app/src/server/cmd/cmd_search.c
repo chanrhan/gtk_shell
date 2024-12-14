@@ -15,11 +15,7 @@ void pop(char* out){
     strcpy(stack[top_index-1], "");
     top_index--;
 }
-    
-// int top(){
-//     return stack[top_index - 1];
-// }
-    
+
 int empty(){
     if(top_index == 0 )
         return 1;

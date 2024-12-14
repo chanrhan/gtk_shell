@@ -94,6 +94,10 @@
     "unordered_map": "c",
     "unordered_set": "c",
     "vector": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "filesystem": "c",
+    "memory": "c",
+    "tuple": "c",
+    "type_traits": "c"
   }
 }

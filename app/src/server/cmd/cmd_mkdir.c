@@ -10,7 +10,7 @@ int cmd_mkdir(req_msg_t req, res_msg_t *res)
     }
 
     printf("validate cwd:%s\n", cwd);
-    int ret = mkdir(cwd, atoi(req.args[1]));
+    int ret = mkdir(cwd, 0755);
     if(ret != 0){
         perror("mkdir: ");
         // char* err = strerror(errno);
