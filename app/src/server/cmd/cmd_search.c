@@ -38,24 +38,13 @@ int cmd_search(req_msg_t req, res_msg_t* res){
 
     DIR *dp;
     struct dirent *dent;
-    // char path[MAX_PATH_LEN];
-    // int first = 0;
     int find = 0;
 
     push(req.cwd);
     printf("Begin Search..\n");
     while(empty() != 1 && find == 0){ // stack이 빌 때까지 반복 
-        // stack.pop
-        // char curr[MAX_PATH_LEN];
         char cwd[MAX_PATH_LEN];
         pop(cwd); // Pop() 
-        // 첫 번째인 경우에만 '/' 안붙임 
-        // if(first == 0){
-        //     sprintf(cwd, "%s", curr);
-        //     first = 1;
-        // }else{
-        //     sprintf(cwd, "%s/%s", path, curr);
-        // }
         printf("%s\n", cwd);
         dp = opendir(cwd); 
 
@@ -87,10 +76,6 @@ int cmd_search(req_msg_t req, res_msg_t* res){
                 push(tmp);
             }
         }
-        // // 자식 파일에 하나라도 있으면, path를 이음 
-        // if(has_child == 1){
-        //     strncpy(path, cwd, MAX_PATH_LEN);
-        // }
     }
     closedir(dp); // 사용 끝났으니 닫기
 
