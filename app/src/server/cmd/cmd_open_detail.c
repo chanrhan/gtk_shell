@@ -44,7 +44,7 @@ int cmd_open_detail(req_msg_t req, res_msg_t* res){
                 (mode & 0004) ? 'r' : '-',
                 (mode & 0002) ? 'w' : '-',
                 (mode & 0001) ? 'x' : '-');
-
+    
     strncpy(file_detail->mtime, gettime_str(statbuf.st_mtime), MTIME_LEN);
     strncpy(file_detail->birthtime, gettime_str(statbuf.st_mtime), MTIME_LEN);
     file_detail->size = statbuf.st_size;

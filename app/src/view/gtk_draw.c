@@ -1,6 +1,7 @@
 #include "gtk_draw.h"
 #include "gtk_callback.h"
 #include "gtk_modal.h"
+#include "view_func.h"
 
 void update_file_list(res_msg_t res){
     if(display_mode != FILE_DISPLAY_MODE){
@@ -18,8 +19,12 @@ void update_file_list(res_msg_t res){
             ++i;
             continue;
         }
+        char time[12];
+        get_time_format(file_list[i].mtime, time);
+        printf("time:%s\n", time);
+
         text = (char*)malloc(128);
-        snprintf(text, 128, "  %-30s%-4d%4s%4d", file_list[i].name, file_list[i].type, file_list[i].mtime, file_list[i].size);
+        snprintf(text, 128, "  %-30s%12s %4d", file_list[i].name, time, file_list[i].size);
         // printf("label:%s\n", text);
         
         // printf("(%d).\n", i);
@@ -340,8 +345,11 @@ void build_layout(GtkWidget* window){
     // gtk_widget_set_name(search_vbox, "search_box");
      gtk_style_class_toggle(search_hbox, "search_cont", TRUE);
 
-    list_header_label = gtk_label_new("list header");
-     gtk_style_class_toggle(list_header_label, "list_header", TRUE);
+    char list_header_text[128];
+    snprintf(list_header_text, 128, "  %-30s %-12s%4s", "Name","Time","Size");
+    list_header_label = gtk_label_new(list_header_text);
+    gtk_label_set_xalign(GTK_LABEL(list_header_label), 0.0);
+    gtk_style_class_toggle(list_header_label, "list_header", TRUE);
     gtk_widget_set_size_request(search_hbox, 850, 25);
 
     GtkWidget* scrolled_window = gtk_scrolled_window_new(NULL, NULL);

@@ -53,18 +53,19 @@ button{
 }
 
 .body .side_box .btn_mvdir:first-child{
-    margin-top: 60px;
+    margin-top: 65px;
 }
 
 .body .side_box .btn_mvdir{
-    background: rgb(124, 124, 124);
+    background: rgb(180, 180, 180);
+    color: black;
     margin: 5px 2px 5px 2px;
     font-size: 16px;
     min-height: 50px;
 }
 
 .body .side_box .btn_mvdir:hover{
-    background: rgb(193, 193, 193);
+    background: rgb(211, 211, 211);
 }
 
 .body .content_box{
@@ -81,7 +82,7 @@ button{
 }
 
 .body .content_box .dir_cont .path_tok:hover{
-    color: #ff2424;
+    color: rgb(211, 240, 255);
 }
 
 .body .content_box .search_cont{
@@ -97,7 +98,9 @@ button{
 }
 
 .body .content_box .list_header{
-    background-color: rgb(255, 242, 186);
+    background-color: rgb(211, 240, 255);
+    font-size: 26px;
+    font-family: Monospace;
 }
 
 .body .content_box .list_box{
@@ -115,8 +118,7 @@ button{
 }
 
 .body .content_box .list_box .file_item .file_info_text{
-    text-align: left;
-    
+    font-family: Monospace;
 }
 
 .cut{

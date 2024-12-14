@@ -59,11 +59,15 @@ int open_file_detail(){
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
         gtk_widget_show_all(md_file_detail.window);
-
         file_info_t* file = &res.data.files[0];
+        char birthtime[12];
+        char mtime[12];
+        get_time_format(file->birthtime, birthtime);
+        get_time_format(file->mtime, mtime);
+
         gtk_label_set_text(GTK_LABEL(md_file_detail.filename_label), file_list[selected_index].name);
-        gtk_label_set_text(GTK_LABEL(md_file_detail.birthtimetime_label), file->birthtime);
-        gtk_label_set_text(GTK_LABEL(md_file_detail.mtime_label), file->mtime);
+        gtk_label_set_text(GTK_LABEL(md_file_detail.birthtimetime_label), birthtime);
+        gtk_label_set_text(GTK_LABEL(md_file_detail.mtime_label), mtime);
         char text[8];
         sprintf(text, "%d", file->size);
         gtk_label_set_text(GTK_LABEL(md_file_detail.size_label), text);

@@ -2,6 +2,23 @@
 #include "gtk_draw.h"
 #include "ipc_view.h"
 
+void get_time_format(char* time, char* out){
+    // oo/oo oo:oo = 11
+    char* buf[4];
+    int i=0;
+    char* p;
+    p = time + strlen(time);
+    while(p > time){
+        p -= 2;
+        buf[i] = (char*)malloc(2);
+        strncpy(buf[i], p, 2);
+        // printf("%s: %s\n",p, buf[i]);
+        ++i;
+        *p = '\0';
+    }
+    snprintf(out, 12, "%s/%s %s:%s", buf[3], buf[2], buf[1], buf[0]);
+}
+
 int move_full_directory(char* path){
     gtk_style_class_toggle(btn_ps, "process_mode", FALSE);
 

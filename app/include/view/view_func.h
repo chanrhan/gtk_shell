@@ -13,6 +13,8 @@ int show_process();
 
 void toggle_display_mode();
 
+void get_time_format(char* time, char* out);
+
 
 #endif
 

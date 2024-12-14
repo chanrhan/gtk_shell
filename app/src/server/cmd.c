@@ -34,6 +34,8 @@ void get_file_list(char *pwd, msg_data_t *data)
         exit(1);
     }
 
+    char path[MAX_PATH_LEN];
+
     int i = 0;
     while ((dent = readdir(dp)))
     { // 파일을 하나씩 읽어옴, 다 읽을 때까지 반복
@@ -41,10 +43,11 @@ void get_file_list(char *pwd, msg_data_t *data)
         {
             continue;
         }
-
+        snprintf(path, MAX_PATH_LEN, "%s/%s", pwd, dent->d_name);
+        printf("name:%s\n",path);
         // stat 명령어를 통해 파일의 상세 정보 가져와서 출력
         struct stat statbuf;
-        stat(dent->d_name, &statbuf);
+        stat(path, &statbuf);
         // printf("[%s] a:%u,s:%u,m:%u", statbuf.st_atimespec);
 
         unsigned int mode = statbuf.st_mode;
@@ -79,6 +82,7 @@ void get_file_list(char *pwd, msg_data_t *data)
         strncpy(data->files[i].name, dent->d_name, 16);
         strncpy(data->files[i].mtime, gettime_str(statbuf.st_mtime), MTIME_LEN);
         data->files[i].size = statbuf.st_size;
+        
 
         ++i;
         if (i >= MAX_FILE_LIST_SIZE - 1)
