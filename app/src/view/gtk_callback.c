@@ -37,7 +37,9 @@ gboolean on_enter_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer da
     if(index >= file_list_size){
         return TRUE;
     }
-    gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
+    if(selected_index != -1){
+        gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
+    }
     return FALSE;
 }
 

@@ -64,7 +64,7 @@ int open_file_detail(){
         char mtime[12];
         get_time_format(file->birthtime, birthtime);
         get_time_format(file->mtime, mtime);
-
+        
         gtk_label_set_text(GTK_LABEL(md_file_detail.filename_label), file_list[selected_index].name);
         gtk_label_set_text(GTK_LABEL(md_file_detail.birthtimetime_label), birthtime);
         gtk_label_set_text(GTK_LABEL(md_file_detail.mtime_label), mtime);

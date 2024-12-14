@@ -1,5 +1,6 @@
 #include "gtk_modal.h"
 #include "gtk_callback.h"
+#include "gtk_draw.h"
 
 void init_bg_menu_context(GtkWidget* parent){
     int MAX_WIDTH = 600;
@@ -197,6 +198,8 @@ void init_modal_file_detail(GtkWidget* parent){
     GtkWidget* vbox, *main_vbox, *ctrl_hbox;
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(md_file_detail.window), vbox);
+    gtk_style_class_toggle(vbox, "file_detail_cont", TRUE);
+    
 
     main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(main_vbox, MAX_WIDTH, 350);
@@ -210,26 +213,74 @@ void init_modal_file_detail(GtkWidget* parent){
     // info_vbox (600, 350)
     GtkWidget* info_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(info_vbox, MAX_WIDTH, 45);
+    gtk_style_class_toggle(info_vbox, "file_info_box", TRUE);
+
     gtk_box_pack_start(GTK_BOX(main_vbox), info_vbox, TRUE, TRUE, 0);
     GtkWidget* perm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(perm_vbox, MAX_WIDTH, 255);
-    gtk_box_pack_start(GTK_BOX(main_vbox), perm_vbox, TRUE, TRUE, 0);
+    gtk_style_class_toggle(perm_vbox, "perm_cont", TRUE);
 
+    gtk_widget_set_size_request(perm_vbox, MAX_WIDTH, 255);
+    gtk_box_pack_start(GTK_BOX(main_vbox), perm_vbox, TRUE, TRUE, 5);
+
+    GtkWidget* filename_field,*mtime_field,*btime_field,*size_field;
+    filename_field = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_style_class_toggle(filename_field, "text_field", TRUE);
+
+    mtime_field = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_style_class_toggle(mtime_field, "text_field", TRUE);
+
+    btime_field = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_style_class_toggle(btime_field, "text_field", TRUE);
+
+    size_field = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_style_class_toggle(size_field, "text_field", TRUE);
+
+    gtk_label_set_xalign(GTK_LABEL(filename_field), 0.0);
+    gtk_label_set_xalign(GTK_LABEL(mtime_field), 0.0);
+    gtk_label_set_xalign(GTK_LABEL(btime_field), 0.0);
+    gtk_label_set_xalign(GTK_LABEL(size_field), 0.0);
+
+    gtk_box_pack_start(GTK_BOX(info_vbox), filename_field, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(info_vbox), mtime_field, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(info_vbox), btime_field, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(info_vbox), size_field, FALSE, FALSE, 0);
+
+    GtkWidget* lb1, *lb2,*lb3,*lb4;
+
+    lb1 = gtk_label_new("Filename:  ");
     md_file_detail.filename_label = gtk_label_new("");
+    // gtk_label_set_xalign(GTK_LABEL(md_file_detail.filename_label), 0.0);
+    gtk_box_pack_start(GTK_BOX(filename_field), lb1, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(filename_field), md_file_detail.filename_label, FALSE, FALSE, 0);
+
+    lb2 = gtk_label_new("Modifed Time:  ");
     md_file_detail.mtime_label = gtk_label_new("");
+    // gtk_label_set_xalign(GTK_LABEL(md_file_detail.mtime_label), 0.0);
+    gtk_box_pack_start(GTK_BOX(mtime_field), lb2, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(mtime_field), md_file_detail.mtime_label, FALSE, FALSE, 0);
+
+    lb3 = gtk_label_new("Create Time:  ");
     md_file_detail.birthtimetime_label = gtk_label_new("");
+    // gtk_label_set_xalign(GTK_LABEL(md_file_detail.birthtimetime_label), 0.0);
+    gtk_box_pack_start(GTK_BOX(btime_field), lb3, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(btime_field), md_file_detail.birthtimetime_label, FALSE, FALSE, 0);
+
+    lb4 = gtk_label_new("Size:  ");
     md_file_detail.size_label = gtk_label_new("");
-    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.filename_label, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.birthtimetime_label, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.mtime_label, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.size_label, TRUE, TRUE, 0);
+    // gtk_label_set_xalign(GTK_LABEL(md_file_detail.size_label), 0.0);
+    gtk_box_pack_start(GTK_BOX(size_field), lb4, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(size_field), md_file_detail.size_label, FALSE, FALSE, 0);
+    
     
     // perm_hbox (600, 225)
     GtkWidget* perm_label =  gtk_label_new("File Access Permission");
+
     gtk_widget_set_size_request(perm_label, MAX_WIDTH, 25);
     gtk_box_pack_start(GTK_BOX(perm_vbox), perm_label, FALSE, FALSE, 0);
 
     GtkWidget* ugo_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_style_class_toggle(ugo_vbox, "ugo_cont", TRUE);
+    
     gtk_widget_set_size_request(ugo_vbox, MAX_WIDTH, 200);
     gtk_box_pack_start(GTK_BOX(perm_vbox), ugo_vbox, FALSE, FALSE, 0);
     GtkWidget* u_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
@@ -240,6 +291,8 @@ void init_modal_file_detail(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(ugo_vbox), o_vbox, TRUE, TRUE, 0);
 
     GtkWidget* u_label =  gtk_label_new("user");
+    gtk_label_set_xalign(GTK_LABEL(u_label), 0.0);
+
     gtk_box_pack_start(GTK_BOX(u_vbox), u_label, TRUE, TRUE, 0);
     md_file_detail.perm_check_box[8] = gtk_check_button_new_with_label("read");
     md_file_detail.perm_check_box[7] = gtk_check_button_new_with_label("write");
@@ -249,6 +302,8 @@ void init_modal_file_detail(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(u_vbox), md_file_detail.perm_check_box[6], TRUE, TRUE, 0);
 
     GtkWidget* g_label =  gtk_label_new("group");
+    gtk_label_set_xalign(GTK_LABEL(g_label), 0.0);
+
     gtk_box_pack_start(GTK_BOX(g_vbox), g_label, TRUE, TRUE, 0);
     md_file_detail.perm_check_box[5] = gtk_check_button_new_with_label("read");
     md_file_detail.perm_check_box[4] = gtk_check_button_new_with_label("write");
@@ -258,6 +313,8 @@ void init_modal_file_detail(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(g_vbox), md_file_detail.perm_check_box[3], TRUE, TRUE, 0);
 
     GtkWidget* o_label =  gtk_label_new("others");
+    gtk_label_set_xalign(GTK_LABEL(o_label), 0.0);
+
     gtk_box_pack_start(GTK_BOX(o_vbox), o_label, TRUE, TRUE, 10);
     md_file_detail.perm_check_box[2] = gtk_check_button_new_with_label("read");
     md_file_detail.perm_check_box[1] = gtk_check_button_new_with_label("write");

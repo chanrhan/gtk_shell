@@ -21,7 +21,6 @@ void update_file_list(res_msg_t res){
         }
         char time[12];
         get_time_format(file_list[i].mtime, time);
-        printf("time:%s\n", time);
 
         text = (char*)malloc(128);
         snprintf(text, 128, "  %-30s%12s %4d", file_list[i].name, time, file_list[i].size);

@@ -1,0 +1,27 @@
+.file_detail_cont{
+    background-color: rgb(255, 255, 255);
+    font-size: 16px;
+}
+
+.file_detail_cont .file_info_box{
+    background-color: rgb(219, 219, 219);
+    float: left;
+    padding: 10px 5px 10px 5px;
+}
+
+.file_detail_cont .file_info_box .text_field{
+    margin-top: 6px;
+}
+
+.perm_cont{
+    background-color: rgb(198, 198, 198);
+}
+
+.perm_cont .perm_list{
+    background-color: red;
+    
+}
+
+.file_detail_cont .perm_cont .ugo_cont{
+    margin: 5px 10px 0 10px;
+}
