@@ -1,7 +1,16 @@
 #include "cmd.h"
 
 int cmd_ps(req_msg_t req, res_msg_t* res){
+    printf("ps\n");
     char out[MAX_PATH_LEN];
+
+    strcpy(res->data.files[0].name, "hello<>world<>111<>456<>hee<>19204224");
+    strcpy(res->data.files[1].name, "hello<>world<>222<>456<>chan<>19204224");
+    strcpy(res->data.files[2].name, "hello<>world<>333<>456<>park<>19204226");
+    strcpy(res->data.files[3].name, "hello<>world<>444<>456<>good<>19204227");
+    res->data.file_len = 4;
+
+    return 0;
 
     DIR* dir;
     struct dirent* dent;
@@ -12,6 +21,8 @@ int cmd_ps(req_msg_t req, res_msg_t* res){
         perror("opendir");
         return 1;
     }
+
+    int index=0;
 
     char* uid;
     char* pid;
@@ -44,6 +55,7 @@ int cmd_ps(req_msg_t req, res_msg_t* res){
     // /proc 내에 모든 pid 정보 읽기 
     while((dent = readdir(dir)) != NULL){
         if(strcmp(dent->d_name, ".") != 0 && strcmp(dent->d_name, "..") != 0){
+            
             // 실행중인 프로세스의 정보가 있는 경로
             sprintf(proc_file, "/proc/%s/stat", dent->d_name);
 

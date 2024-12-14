@@ -3,6 +3,9 @@
 #include "gtk_modal.h"
 
 void update_file_list(res_msg_t res){
+    if(display_mode != FILE_DISPLAY_MODE){
+        return;
+    }
     file_list_size = res.data.file_len;
     for(int i=0;i<file_list_size;++i){
         file_list[i] = res.data.files[i];
@@ -40,6 +43,45 @@ void update_file_list(res_msg_t res){
         // printf("(%d) clean\n", i);
         gtk_label_set_text(GTK_LABEL(label_data[i]), "");
         ++i;
+    }
+}
+
+void update_process_list(res_msg_t res){
+    if(display_mode != PROCESS_DISPLAY_MODE){
+        return;
+    }
+    printf("update process list\n");
+    int len = res.data.file_len;
+    char* buf[6]; // uid, pid, ppid, starttime, time, cmd
+    char* tok;
+    char text[128];
+
+    int i=0;
+    for(;i<len;++i){
+        buf[0] = strtok(res.data.files[i].name, "<>");
+        int k=1;
+        for(;k<6;++k){
+            if(buf[k] == NULL){
+                break;
+            }
+            buf[k] = strtok(NULL, "<>");
+        }
+        for(;k<6;++k){
+            buf[k] = (char*)malloc(16);
+            strcpy(buf[k], "");
+        }
+        strcpy(file_list[i].name, buf[0]); // pid를 파일 name 필드에 저장 
+        snprintf(text, 128, "%10s%10s%10s%10s%10s%10s", buf[0],buf[1],buf[2],buf[3],buf[4],buf[5]);
+        gtk_label_set_text(GTK_LABEL(label_data[i]), text);
+    }
+    for(;i<MAX_FILE_LIST_SIZE;++i){
+        strcpy(file_list[i].name, "");
+        gtk_label_set_text(GTK_LABEL(label_data[i]), "");
+    }
+
+    gtk_label_set_text(GTK_LABEL(path_tok_label[0]), "PROCESS MODE");
+    for(int i=1;i<MAX_PATH_TOKEN;++i){
+        gtk_label_set_text(GTK_LABEL(path_tok_label[i]), "");
     }
 }
 
@@ -117,22 +159,30 @@ GtkWidget *create_gtk_main_window()
 }
 
 void css_init(){
-    GtkCssProvider *provider;
+    GtkCssProvider *main_prvd, *modal_prvd;
     GdkDisplay *display;
     GdkScreen *screen;
 
-    provider = gtk_css_provider_new();
+    main_prvd = gtk_css_provider_new();
+    modal_prvd = gtk_css_provider_new();
     display = gdk_display_get_default();
     screen = gdk_display_get_default_screen(display);
 
     gtk_style_context_add_provider_for_screen(
         screen,
-        GTK_STYLE_PROVIDER(provider),
+        GTK_STYLE_PROVIDER(main_prvd),
         GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
     );
 
-    gtk_css_provider_load_from_path(provider, "src/resource/style.css", NULL);
-    g_object_unref(provider);
+    gtk_style_context_add_provider_for_screen(
+        screen,
+        GTK_STYLE_PROVIDER(modal_prvd),
+        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+    );
+
+    gtk_css_provider_load_from_path(main_prvd, "src/resource/style.css", NULL);
+    gtk_css_provider_load_from_path(modal_prvd, "src/resource/modal.css", NULL);
+    g_object_unref(main_prvd);
 }
 
 void css_reload() {
@@ -167,6 +217,7 @@ void build_layout(GtkWidget* window){
     GtkWidget *vbox;
 
     vbox = gtk_vbox_new(FALSE, 0);
+    gtk_style_class_toggle(vbox, "container", TRUE);
     gtk_container_add(GTK_CONTAINER(window), vbox);
 
     // vbox :
@@ -174,41 +225,44 @@ void build_layout(GtkWidget* window){
     header_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_size_request(header_hbox, 1000, 50);
     // gtk_widget_set_name(header_hbox, "header_box");
-    gtk_style_class_toggle(header_hbox, "header_box", TRUE);
+    gtk_style_class_toggle(header_hbox, "header", TRUE);
 
     body_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_size_request(body_hbox, 1000, 650);
     // gtk_widget_set_name(body_hbox, "body_box");
-     gtk_style_class_toggle(body_hbox, "body_box", TRUE);
+     gtk_style_class_toggle(body_hbox, "body", TRUE);
 
     footer_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(footer_vbox, 1000, 100);
     // gtk_widget_set_name(footer_vbox, "footer_box");
-     gtk_style_class_toggle(footer_vbox, "footer_box", TRUE);
+     gtk_style_class_toggle(footer_vbox, "footer", TRUE);
 
     gtk_box_pack_start(GTK_BOX(vbox), header_hbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), body_hbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), footer_vbox, TRUE, TRUE, 0);
 
     // header_h :
-    GtkWidget *btn_mkdir, *btn_mkfile, *btn_ps, *btn_quit;
+    GtkWidget *btn_mkdir, *btn_mkfile, *btn_quit;
 
     btn_mkdir = gtk_button_new_with_label("+ Directory");
     // gtk_widget_set_name(btn_mkdir, "custom_button");
-     gtk_style_class_toggle(btn_mkdir, "custom_button", TRUE);
+     gtk_style_class_toggle(btn_mkdir, "btn_mkdir", TRUE);
 
     btn_mkfile = gtk_button_new_with_label("+ File");
+    gtk_style_class_toggle(btn_mkdir, "btn_mkfile", TRUE);
     btn_ps = gtk_button_new_with_label("Show Process");
+    gtk_style_class_toggle(btn_mkdir, "btn_ps", TRUE);
 
     btn_quit = gtk_button_new_with_label("quit");
+    gtk_style_class_toggle(btn_mkdir, "btn_quit", TRUE);
 
     g_signal_connect(btn_mkdir, "clicked", G_CALLBACK(g_callback_mkdir_popup_open), NULL);
     g_signal_connect(btn_mkfile, "clicked", G_CALLBACK(g_callback_file_info_open), NULL);
-    // g_signal_connect(btn_ps, "clicked", G_CALLBACK(g_callback_mkdir_popup_open), NULL);
+    g_signal_connect(btn_ps, "clicked", G_CALLBACK(g_callback_change_display_mode), NULL);
     g_signal_connect(btn_quit, "clicked", G_CALLBACK(g_callback_quit), NULL);
 
-    gtk_box_pack_start(GTK_BOX(header_hbox), btn_mkdir, FALSE, FALSE, 5);
-    gtk_box_pack_start(GTK_BOX(header_hbox), btn_mkfile, FALSE, FALSE, 5);
+    // gtk_box_pack_start(GTK_BOX(header_hbox), btn_mkdir, FALSE, FALSE, 5);
+    // gtk_box_pack_start(GTK_BOX(header_hbox), btn_mkfile, FALSE, FALSE, 5);
     gtk_box_pack_start(GTK_BOX(header_hbox), btn_ps, FALSE, FALSE, 5);
     gtk_box_pack_end(GTK_BOX(header_hbox), btn_quit, FALSE, FALSE, 5);
 
@@ -224,8 +278,8 @@ void build_layout(GtkWidget* window){
     // gtk_widget_set_name(content_vbox, "content_box");
      gtk_style_class_toggle(content_vbox, "content_box", TRUE);
 
-    gtk_box_pack_start(GTK_BOX(body_hbox), sidebar_vbox, TRUE, TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(body_hbox), content_vbox, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(body_hbox), sidebar_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(body_hbox), content_vbox, TRUE, TRUE, 0);
 
     // side_box_v :
     GtkWidget* btn_mvdir_desktop;
@@ -233,16 +287,27 @@ void build_layout(GtkWidget* window){
     GtkWidget* btn_mvdir_documents;
 
     btn_mvdir_desktop = gtk_button_new_with_label("Desktop");
+    gtk_widget_set_size_request(btn_mvdir_desktop, 75, 50);
+     gtk_style_class_toggle(btn_mvdir_desktop, "btn_mvdir", TRUE);
+     gtk_style_class_toggle(btn_mvdir_desktop, "btn_desktop", TRUE);
+
     btn_mvdir_downloads = gtk_button_new_with_label("Downloads");
+    gtk_widget_set_size_request(btn_mvdir_downloads, 75, 50);
+     gtk_style_class_toggle(btn_mvdir_downloads, "btn_mvdir", TRUE);
+     gtk_style_class_toggle(btn_mvdir_downloads, "btn_downloads", TRUE);
+
     btn_mvdir_documents = gtk_button_new_with_label("Documents");
+    gtk_widget_set_size_request(btn_mvdir_documents, 75, 50);
+     gtk_style_class_toggle(btn_mvdir_documents, "btn_mvdir", TRUE);
+     gtk_style_class_toggle(btn_mvdir_documents, "btn_documents", TRUE);
 
     g_signal_connect(btn_mvdir_desktop, "clicked", G_CALLBACK(g_callback_mvdir), "/tmp/test/desktop");
     g_signal_connect(btn_mvdir_downloads, "clicked", G_CALLBACK(g_callback_mvdir), "/tmp/test/downloads");
     g_signal_connect(btn_mvdir_documents, "clicked", G_CALLBACK(g_callback_mvdir), "/tmp/test/documents");
 
-    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_desktop, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_downloads, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_documents, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_desktop, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_downloads, FALSE, FALSE, 0);
+    gtk_box_pack_start(GTK_BOX(sidebar_vbox), btn_mvdir_documents, FALSE, FALSE, 0);
 
 
     // content_box_v :
@@ -250,19 +315,21 @@ void build_layout(GtkWidget* window){
     dir_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_size_request(dir_hbox, 850, 50);
     // gtk_widget_set_name(dir_vbox, "dir_box");
-     gtk_style_class_toggle(dir_hbox, "dir_box", TRUE);
+     gtk_style_class_toggle(dir_hbox, "dir_cont", TRUE);
 
     search_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_size_request(search_hbox, 850, 50);
     // gtk_widget_set_name(search_vbox, "search_box");
-     gtk_style_class_toggle(search_hbox, "search_box", TRUE);
+     gtk_style_class_toggle(search_hbox, "search_cont", TRUE);
 
-     list_header_label = gtk_label_new("");
+    list_header_label = gtk_label_new("list header");
+     gtk_style_class_toggle(list_header_label, "list_header", TRUE);
+    gtk_widget_set_size_request(search_hbox, 850, 25);
 
     GtkWidget* scrolled_window = gtk_scrolled_window_new(NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_set_size_request(scrolled_window, 850, 550);
+    gtk_widget_set_size_request(scrolled_window, 850, 475);
 
     gtk_box_pack_start(GTK_BOX(content_vbox), dir_hbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(content_vbox), search_hbox, TRUE, TRUE, 0);
@@ -278,6 +345,7 @@ void build_layout(GtkWidget* window){
     int* index;
     for(int i=0;i<MAX_PATH_TOKEN;++i){
         GtkWidget* event_box = gtk_event_box_new();
+        gtk_style_class_toggle(event_box, "path_tok", TRUE);
         // gtk_widget_set_name(event_box, "file_info_text");
         //  gtk_style_class_toggle(event_box, "file_item_box", TRUE);
 
@@ -291,16 +359,22 @@ void build_layout(GtkWidget* window){
         g_object_set_data(G_OBJECT(event_box), "index", index);
 
         g_signal_connect(event_box, "button-press-event", G_CALLBACK(g_callback_mvdir_tok), NULL);
+        g_signal_connect(event_box, "enter-notify-event", G_CALLBACK(on_enter_notify_path_tok), NULL);
+        g_signal_connect(event_box, "leave-notify-event", G_CALLBACK(on_leave_notify_path_tok), NULL);
 
         gtk_box_pack_start(GTK_BOX(dir_hbox), event_box, FALSE, FALSE, 10);
     }
 
     // search_hbox
     search_inp = gtk_entry_new();
-    //  gtk_widget_set_size_request(search_inp, 400, 25);
+    gtk_style_class_toggle(search_inp, "inp_search", TRUE);
+     gtk_widget_set_size_request(search_inp, 500, 25);
     gtk_entry_set_placeholder_text(GTK_ENTRY(search_inp), "search by filename...");
     GtkWidget* btn_search;
     btn_search = gtk_button_new_with_label("Search");
+     gtk_widget_set_size_request(btn_search, 100, 25);
+    gtk_style_class_toggle(btn_search, "btn_search", TRUE);
+
     gtk_box_pack_start(GTK_BOX(search_hbox), search_inp, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(search_hbox), btn_search, TRUE, TRUE, 0);
 
@@ -318,10 +392,10 @@ void build_layout(GtkWidget* window){
     for(int i=0;i<MAX_FILE_LIST_SIZE;++i){
         GtkWidget* event_box = gtk_event_box_new();
         // gtk_widget_set_name(event_box, "file_info_text");
-         gtk_style_class_toggle(event_box, "file_item_box", TRUE);
+         gtk_style_class_toggle(event_box, "file_item", TRUE);
 
         label_data[i] = gtk_label_new("test label");
-        gtk_style_class_toggle(label_data[i], "file_item_text", TRUE);
+        gtk_style_class_toggle(label_data[i], "file_info_text", TRUE);
         gtk_label_set_xalign(GTK_LABEL(label_data[i]), 0.0);
         gtk_container_add(GTK_CONTAINER(event_box), label_data[i]);
 
@@ -333,22 +407,29 @@ void build_layout(GtkWidget* window){
         g_signal_connect(event_box, "enter-notify-event", G_CALLBACK(on_enter_notify), NULL);
         g_signal_connect(event_box, "leave-notify-event", G_CALLBACK(on_leave_notify), NULL);
 
-        gtk_box_pack_start(GTK_BOX(list_vbox), event_box, FALSE, FALSE, 10);
+        gtk_box_pack_start(GTK_BOX(list_vbox), event_box, FALSE, FALSE, 0);
     }
     
     // footer_h :
-    GtkWidget* clipboard_vbox;
-    clipboard_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    GtkWidget* clipboard_hbox, *clip_title;
+    clipboard_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     // gtk_widget_set_name(clipboard_vbox, "clipboard_box");
-     gtk_style_class_toggle(clipboard_vbox, "clipboard_box", TRUE);
-    gtk_box_pack_start(GTK_BOX(footer_vbox), clipboard_vbox, TRUE, TRUE, 0);
+     gtk_style_class_toggle(clipboard_hbox, "clipboard_cont", TRUE);
+    gtk_box_pack_start(GTK_BOX(footer_vbox), clipboard_hbox, TRUE, TRUE, 0);
+
+    clip_title = gtk_label_new("Clipboard");
+    gtk_widget_set_size_request(clip_title, 200, 30);
+    gtk_style_class_toggle(clip_title, "clip_title", TRUE);
+    gtk_box_pack_start(GTK_BOX(clipboard_hbox), clip_title, TRUE, TRUE, 0);
 
     copied_file_label = gtk_label_new("");
-    gtk_box_pack_start(GTK_BOX(clipboard_vbox), copied_file_label, TRUE, TRUE, 0);
+    gtk_widget_set_size_request(copied_file_label, 800, 30);
+    gtk_style_class_toggle(copied_file_label, "clipboard_text", TRUE);
+    gtk_box_pack_start(GTK_BOX(clipboard_hbox), copied_file_label, TRUE, TRUE, 0);
     
     dialog_label = gtk_label_new("");
     // gtk_widget_set_name(dialog_label, "dialog_label");
-     gtk_style_class_toggle(dialog_label, "dialog_label", TRUE);
+     gtk_style_class_toggle(dialog_label, "msg_text", TRUE);
     gtk_box_pack_start(GTK_BOX(footer_vbox), dialog_label, TRUE, TRUE, 0);
 
     gtk_widget_add_events(window, GDK_BUTTON_PRESS_MASK);
@@ -362,6 +443,30 @@ gboolean clear_dialog_text(gpointer data){
 void show_dialog_text(char* msg){
     gtk_label_set_text(dialog_label, msg);
     g_timeout_add(3000, clear_dialog_text, NULL);
+}
+
+gboolean timeout_inform(){
+    gtk_label_set_text(dialog_label, "");
+    gtk_style_class_toggle(dialog_label, CLASS_INFORM, FALSE);
+    return FALSE;
+}
+
+void inform_dialog(char* msg){
+    gtk_label_set_text(dialog_label, msg);
+    gtk_style_class_toggle(dialog_label, CLASS_INFORM, TRUE);
+    g_timeout_add(3000, timeout_inform, NULL);
+}
+
+gboolean timeout_error(){
+    gtk_label_set_text(dialog_label, "");
+    gtk_style_class_toggle(dialog_label, CLASS_ERROR, FALSE);
+    return FALSE;
+}
+
+void error_dialog(char* msg){
+    gtk_label_set_text(dialog_label, msg);
+    gtk_style_class_toggle(dialog_label, CLASS_ERROR, TRUE);
+    g_timeout_add(3000, timeout_error, NULL);
 }
 
 void gtk_style_class_toggle(GtkWidget* widget, char* classname, gboolean flag){

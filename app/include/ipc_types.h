@@ -4,8 +4,7 @@
 #define MSG_Q_REQ_PROJ_ID 101
 #define MSG_Q_RES_PROJ_ID 201
 
-#define DISPLAY_FILE 150
-#define DISPLAY_PROCESS 151
+
 
 #define CMD_LS 1 // ls
 #define CMD_LS_FULL 2 // entire directory

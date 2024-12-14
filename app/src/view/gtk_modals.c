@@ -15,7 +15,7 @@ void init_bg_menu_context(GtkWidget* parent){
 
     g_signal_connect(item_paste, "activate", G_CALLBACK(g_callback_file_paste), NULL);
     g_signal_connect(item_create_dir, "activate", G_CALLBACK(g_callback_mkdir_popup_open), NULL);
-    // g_signal_connect(item_create_file, "activate", G_CALLBACK(g_callback_open_mkfile_modal), NULL);
+    g_signal_connect(item_create_file, "activate", G_CALLBACK(g_callback_file_info_open), NULL);
     // g_signal_connect(item_open_terminal, "activate", G_CALLBACK(g_callback_file_rename), NULL);
     // g_signal_connect(item_create, "activate", G_CALLBACK(g_callback_file_move), NULL);
 
@@ -117,8 +117,8 @@ void init_dir_menu_context(GtkWidget* parent){
 
 
 void init_mkdir_modal(GtkWidget* parent){
-    int MAX_WIDTH = 600;
-    int MAX_HEIGHT = 400;
+    int MAX_WIDTH = 250;
+    int MAX_HEIGHT = 100;
     // add_btn
     md_mkdir.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(md_mkdir.window), "File Info");
@@ -134,99 +134,42 @@ void init_mkdir_modal(GtkWidget* parent){
     gtk_container_add(GTK_CONTAINER(md_mkdir.window), vbox);
 
     func_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(func_vbox, MAX_WIDTH, 350);
+    gtk_widget_set_size_request(func_vbox, MAX_WIDTH, 75);
 
     ctrl_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(ctrl_hbox, MAX_WIDTH, 50);
+    gtk_widget_set_size_request(ctrl_hbox, MAX_WIDTH, 25);
 
     gtk_box_pack_start(GTK_BOX(vbox), func_vbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), ctrl_hbox, TRUE, TRUE, 0);
 
     // func_box (600, 350)
-    GtkWidget* setting_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(setting_hbox, 600, 45);
-    gtk_box_pack_start(GTK_BOX(func_vbox), setting_hbox, TRUE, TRUE, 0);
-    GtkWidget* perm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(perm_vbox, 600, 255);
-    gtk_box_pack_start(GTK_BOX(func_vbox), perm_vbox, TRUE, TRUE, 0);
+    // GtkWidget* setting_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    // gtk_widget_set_size_request(setting_hbox, MAX_WIDTH, 150);
+    // gtk_box_pack_start(GTK_BOX(func_vbox), setting_hbox, TRUE, TRUE, 0);
+    // GtkWidget* perm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // gtk_widget_set_size_request(perm_vbox, MAX_WIDTH, 255);
+    // gtk_box_pack_start(GTK_BOX(func_vbox), perm_vbox, TRUE, TRUE, 0);
 
     // setting_hbox (600, 45)
-    GtkWidget* type_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(type_vbox, 200, 45);
-    gtk_box_pack_start(GTK_BOX(setting_hbox), type_vbox, TRUE, TRUE, 0);
+    // GtkWidget* type_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    // gtk_widget_set_size_request(type_vbox, 200, 45);
+    // gtk_box_pack_start(GTK_BOX(setting_hbox), type_vbox, TRUE, TRUE, 0);
     GtkWidget* inp_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(inp_vbox, 400, 45);
-    gtk_box_pack_start(GTK_BOX(setting_hbox), inp_vbox, TRUE, TRUE, 0);
-
-    // type_vbox (200, 45)
-    // GtkWidget* type_label = gtk_label_new("File Type");
-    // gtk_widget_set_size_request(type_label, 200, 20);
-    // gtk_box_pack_start(GTK_BOX(type_vbox), type_label, FALSE, FALSE, 0);
-
-    // mkdir_modal.select_type = gtk_combo_box_text_new();
-    // gtk_widget_set_size_request(mkdir_modal.select_type, 200, 25);
-
-    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "directory");
-    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "file");
-    // gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(mkdir_modal.select_type), "link");
-
-    // gtk_combo_box_set_active(GTK_COMBO_BOX(mkdir_modal.select_type), 0);  // 기본 선택 항목 설정
-
-    // gtk_box_pack_start(GTK_BOX(type_vbox), mkdir_modal.select_type, FALSE, FALSE, 0);
+    gtk_widget_set_size_request(inp_vbox, MAX_WIDTH, 75);
+    gtk_box_pack_start(GTK_BOX(func_vbox), inp_vbox, TRUE, TRUE, 0);
 
     // inp_vbox (400, 45)
     GtkWidget* inp_label = gtk_label_new("File Name");
-    gtk_widget_set_size_request(inp_label, 400, 20);
+    gtk_widget_set_size_request(inp_label, MAX_WIDTH, 20);
     gtk_box_pack_start(GTK_BOX(inp_vbox), inp_label, FALSE, FALSE, 0);
     md_mkdir.inp_filename = gtk_entry_new();
-    gtk_widget_set_size_request(md_mkdir.inp_filename, 400, 25);
+    gtk_widget_set_size_request(md_mkdir.inp_filename, MAX_WIDTH-5, 25);
     gtk_entry_set_placeholder_text(GTK_ENTRY(md_mkdir.inp_filename), "input new filename...");
     gtk_box_pack_start(GTK_BOX(inp_vbox), md_mkdir.inp_filename, FALSE, FALSE, 0);
 
     md_mkdir.inp_error_label = gtk_label_new("");
+    gtk_widget_set_size_request(md_mkdir.inp_error_label, MAX_WIDTH, 25);
     gtk_box_pack_start(GTK_BOX(inp_vbox), md_mkdir.inp_error_label, FALSE, FALSE, 0);
-    
-    // perm_hbox (600, 225)
-    GtkWidget* perm_label =  gtk_label_new("File Access Permission");
-    gtk_widget_set_size_request(perm_label, 600, 25);
-    gtk_box_pack_start(GTK_BOX(perm_vbox), perm_label, FALSE, FALSE, 0);
-
-    GtkWidget* ugo_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(ugo_hbox, 600, 200);
-    gtk_box_pack_start(GTK_BOX(perm_vbox), ugo_hbox, FALSE, FALSE, 0);
-    GtkWidget* u_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    GtkWidget* g_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    GtkWidget* o_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(ugo_hbox), u_vbox, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(ugo_hbox), g_vbox, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(ugo_hbox), o_vbox, TRUE, TRUE, 0);
-
-    GtkWidget* u_label =  gtk_label_new("user");
-    gtk_box_pack_start(GTK_BOX(u_vbox), u_label, TRUE, TRUE, 0);
-    md_mkdir.perm_check_box[8] = gtk_check_button_new_with_label("read");
-    md_mkdir.perm_check_box[7] = gtk_check_button_new_with_label("write");
-    md_mkdir.perm_check_box[6] = gtk_check_button_new_with_label("execute");
-    gtk_box_pack_start(GTK_BOX(u_vbox), md_mkdir.perm_check_box[8], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(u_vbox), md_mkdir.perm_check_box[7], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(u_vbox), md_mkdir.perm_check_box[6], TRUE, TRUE, 0);
-
-    GtkWidget* g_label =  gtk_label_new("group");
-    gtk_box_pack_start(GTK_BOX(g_vbox), g_label, TRUE, TRUE, 0);
-    md_mkdir.perm_check_box[5] = gtk_check_button_new_with_label("read");
-    md_mkdir.perm_check_box[4] = gtk_check_button_new_with_label("write");
-    md_mkdir.perm_check_box[3] = gtk_check_button_new_with_label("execute");
-    gtk_box_pack_start(GTK_BOX(g_vbox), md_mkdir.perm_check_box[5], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(g_vbox), md_mkdir.perm_check_box[4], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(g_vbox), md_mkdir.perm_check_box[3], TRUE, TRUE, 0);
-
-    GtkWidget* o_label =  gtk_label_new("others");
-    gtk_box_pack_start(GTK_BOX(o_vbox), o_label, TRUE, TRUE, 10);
-    md_mkdir.perm_check_box[2] = gtk_check_button_new_with_label("read");
-    md_mkdir.perm_check_box[1] = gtk_check_button_new_with_label("write");
-    md_mkdir.perm_check_box[0] = gtk_check_button_new_with_label("execute");
-    gtk_box_pack_start(GTK_BOX(o_vbox), md_mkdir.perm_check_box[2], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(o_vbox), md_mkdir.perm_check_box[1], TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(o_vbox), md_mkdir.perm_check_box[0], TRUE, TRUE, 0);
 
     // ctrl_box
     md_mkdir.btn_close = gtk_button_new_with_label("Cancel");
@@ -234,12 +177,12 @@ void init_mkdir_modal(GtkWidget* parent){
     g_signal_connect(md_mkdir.btn_close, "clicked", G_CALLBACK(on_popup_close), md_mkdir.window);
     g_signal_connect(md_mkdir.btn_submit, "clicked", G_CALLBACK(g_callback_mkdir_popup_submit), NULL);
 
-    gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_mkdir.btn_submit, TRUE, TRUE, 5);
-    gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_mkdir.btn_close, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_mkdir.btn_submit, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_mkdir.btn_close, TRUE, TRUE, 0);
 }
 
 void init_modal_file_detail(GtkWidget* parent){
-    int MAX_WIDTH = 600;
+    int MAX_WIDTH = 250;
     int MAX_HEIGHT = 400;
     // add_btn
     md_file_detail.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -266,10 +209,10 @@ void init_modal_file_detail(GtkWidget* parent){
 
     // info_vbox (600, 350)
     GtkWidget* info_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(info_vbox, 600, 45);
+    gtk_widget_set_size_request(info_vbox, MAX_WIDTH, 45);
     gtk_box_pack_start(GTK_BOX(main_vbox), info_vbox, TRUE, TRUE, 0);
     GtkWidget* perm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(perm_vbox, 600, 255);
+    gtk_widget_set_size_request(perm_vbox, MAX_WIDTH, 255);
     gtk_box_pack_start(GTK_BOX(main_vbox), perm_vbox, TRUE, TRUE, 0);
 
     md_file_detail.filename_label = gtk_label_new("");
@@ -283,18 +226,18 @@ void init_modal_file_detail(GtkWidget* parent){
     
     // perm_hbox (600, 225)
     GtkWidget* perm_label =  gtk_label_new("File Access Permission");
-    gtk_widget_set_size_request(perm_label, 600, 25);
+    gtk_widget_set_size_request(perm_label, MAX_WIDTH, 25);
     gtk_box_pack_start(GTK_BOX(perm_vbox), perm_label, FALSE, FALSE, 0);
 
-    GtkWidget* ugo_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(ugo_hbox, 600, 200);
-    gtk_box_pack_start(GTK_BOX(perm_vbox), ugo_hbox, FALSE, FALSE, 0);
+    GtkWidget* ugo_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_size_request(ugo_vbox, MAX_WIDTH, 200);
+    gtk_box_pack_start(GTK_BOX(perm_vbox), ugo_vbox, FALSE, FALSE, 0);
     GtkWidget* u_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget* g_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     GtkWidget* o_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_box_pack_start(GTK_BOX(ugo_hbox), u_vbox, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(ugo_hbox), g_vbox, TRUE, TRUE, 0);
-    gtk_box_pack_start(GTK_BOX(ugo_hbox), o_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(ugo_vbox), u_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(ugo_vbox), g_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(ugo_vbox), o_vbox, TRUE, TRUE, 0);
 
     GtkWidget* u_label =  gtk_label_new("user");
     gtk_box_pack_start(GTK_BOX(u_vbox), u_label, TRUE, TRUE, 0);
@@ -377,8 +320,8 @@ void init_text_editor_modal(GtkWidget* parent){
 
     // ctrl_box
     GtkWidget* btn_close, *btn_submit;
-    btn_close = gtk_button_new_with_label("취소");
-    btn_submit = gtk_button_new_with_label("생성");
+    btn_close = gtk_button_new_with_label("Cancel");
+    btn_submit = gtk_button_new_with_label("Save");
     g_signal_connect(btn_close, "clicked", G_CALLBACK(on_popup_close), md_text_editor.window);
     g_signal_connect(btn_submit, "clicked", G_CALLBACK(g_callback_submit_mkfile), NULL);
 

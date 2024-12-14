@@ -14,6 +14,18 @@ file_info_t get_clicked_file_info(GtkWidget* widget){
     return file_list[*index];
 }
 
+int g_callback_change_display_mode(GtkWidget* widget, gpointer data){
+    toggle_display_mode();
+}
+
+gboolean on_enter_notify_path_tok(GtkWidget *widget, GdkEventCrossing *event, gpointer data){
+    gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
+}
+
+gboolean on_leave_notify_path_tok(GtkWidget *widget, GdkEventCrossing *event, gpointer data){
+     gtk_widget_unset_state_flags(widget, GTK_STATE_FLAG_PRELIGHT);
+}
+
 // hover in
 gboolean on_enter_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer data) {
     int index = get_clicked_index(widget);
@@ -44,43 +56,49 @@ int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer d
     char* filename = file_list[index].name;
     // printf("clicked:%d\n", index);
     
-    if(event->type  == GDK_BUTTON_PRESS && event->button == 3){
-        printf("right click\n");
-        GtkMenu* target_menu_context;
-        if(index >= file_list_size){ // background
-            selected_index = -1;
-            gtk_widget_set_sensitive(ctxm_bg_option.item_paste, (copy_mode == -1) ? FALSE : TRUE);
-            target_menu_context = ctxm_bg_option.menu;
-        }else{
-            int type = file_list[index].type;
-            if(type == 4){
-                target_menu_context = ctxm_dir_option.menu;
+    if(display_mode == FILE_DISPLAY_MODE){
+        if(event->type  == GDK_BUTTON_PRESS && event->button == 3){
+            printf("right click\n");
+            GtkMenu* target_menu_context;
+            if(index >= file_list_size){ // background
+                selected_index = -1;
+                gtk_widget_set_sensitive(ctxm_bg_option.item_paste, (copy_mode == -1) ? FALSE : TRUE);
+                target_menu_context = ctxm_bg_option.menu;
             }else{
-                target_menu_context = ctxm_file_option.menu;
+                int type = file_list[index].type;
+                if(type == 4){
+                    target_menu_context = ctxm_dir_option.menu;
+                }else{
+                    target_menu_context = ctxm_file_option.menu;
+                }
+                selected_index = index;
             }
-            selected_index = index;
+            gtk_menu_popup_at_pointer(target_menu_context, (GdkEvent *)event);
+        }else{
+            //  printf("111:%s\n", filename);
+            if(filename[0] != '\0'){
+            //  printf("222\n");
+                switch (file_list[index].type)
+                {
+                case 4:
+            //  printf("333\n");
+                    move_directory(filename);
+                    break;
+                case 8:
+                    read_file(filename);
+                    break;
+                default:
+                    break;
+                }
+            }
+            
+            selected_index = -1;
         }
-        gtk_menu_popup_at_pointer(target_menu_context, (GdkEvent *)event);
     }else{
-        //  printf("111:%s\n", filename);
-        if(filename[0] != '\0'){
-        //  printf("222\n");
-            switch (file_list[index].type)
-            {
-            case 4:
-        //  printf("333\n");
-                move_directory(filename);
-                break;
-            case 8:
-                read_file(filename);
-                break;
-            default:
-                break;
-            }
-        }
-        
-        selected_index = -1;
+        // DISPLAY PROCESS MODE
+
     }
+    
 
     return TRUE;
 }
@@ -88,14 +106,6 @@ int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer d
 int g_callback_mkdir_popup_open(GtkWidget* widget, gpointer data){
     edit_mode = EDIT_MODE_MAKE;
     gtk_window_set_title(GTK_WINDOW(md_mkdir.window), "CREATE DIRECTORY");
-    // printf("menu open\n");
-    int bit[9] = {1,1,1,1,1,1,1,1,1};
-    for(int i=0;i<9;++i){
-        if(bit[i] == 1){
-            // printf("(%d) set\n", i);
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(md_mkdir.perm_check_box[i]), TRUE);
-        }
-    }
     gtk_widget_show_all(md_mkdir.window);
 
     return TRUE; 
@@ -121,9 +131,9 @@ int g_callback_dir_info_open(GtkWidget* widget, gpointer data){
     gtk_widget_show_all(md_mkdir.window);
 }
 
-// int g_callback_open_mkfile_modal(GtkWidget* widget, gpointer data){
-//     open_text_editor();
-// }
+int g_callback_open_mkfile_modal(GtkWidget* widget, gpointer data){
+    open_text_editor();
+}
 
 int g_callback_submit_mkfile(GtkWidget* widget, gpointer data){
     write_file();
@@ -136,6 +146,7 @@ int g_callback_mkdir_popup_submit(GtkWidget* widget, gpointer data){
 }
 
 int g_callback_mvdir(GtkWidget* widget, gpointer data){
+    display_mode = FILE_DISPLAY_MODE;
     char* str = (char*)data;
     printf("mv:%s\n", str);
     move_full_directory(str);
@@ -147,6 +158,7 @@ char* gettok(int index){
 }
 
 int g_callback_mvdir_tok(GtkWidget* widget, gpointer data){
+    display_mode = FILE_DISPLAY_MODE;
     int index = get_clicked_index(widget);
     int i=0;
     char mv_path[MAX_PATH_LEN];
@@ -166,11 +178,8 @@ int g_callback_mvdir_tok(GtkWidget* widget, gpointer data){
 
 gboolean on_realize(gpointer data){
     // printf("realize\n");
-    if(display_mode == DISPLAY_FILE){
-        move_directory(NULL);
-    }else if(display_mode == DISPLAY_PROCESS){
-        show_process();
-    }
+    move_directory(NULL);
+
     return FALSE;
 }
 

@@ -3,6 +3,8 @@
 #include "ipc_view.h"
 
 int move_full_directory(char* path){
+    gtk_style_class_toggle(btn_ps, "process_mode", FALSE);
+
     printf("move cwd: %s\n", path);
 
     req_msg_t req;
@@ -43,14 +45,26 @@ int move_directory(char* path){
     return 0;
 }
 
-
 int show_process(){
     req_msg_t req;
     res_msg_t res;
+
     req.cmd = CMD_PS;
-    send_wait_rcv(&req, &res);
-    if(res.status != STATUS_OK){
-        return 1;
+
+    int len = send_wait_rcv(&req, &res);
+    if(len >= 0){
+        update_process_list(res);
     }
-    
+}
+
+void toggle_display_mode(){
+    if(display_mode == FILE_DISPLAY_MODE){
+        display_mode = PROCESS_DISPLAY_MODE;
+        gtk_style_class_toggle(btn_ps, "process_mode", TRUE);
+        show_process();
+    }else{
+        display_mode = FILE_DISPLAY_MODE;
+        gtk_style_class_toggle(btn_ps, "process_mode", FALSE);
+        move_full_directory(cwd);
+    }
 }

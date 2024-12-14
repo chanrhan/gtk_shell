@@ -41,9 +41,9 @@ int change_perm(){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        show_dialog_text("Permission Update Success");
+        inform_dialog("Permission Update Success");
     }else{
-        show_dialog_text("Permission Update Failed");
+        error_dialog("Permission Update Failed");
     }
     gtk_widget_hide(md_file_detail.window);
 }
@@ -91,12 +91,13 @@ int submit_file_info(){
         default:
             break;
     }
-    gtk_widget_hide(md_mkdir.window);
+    
 }
 
 int open_text_editor(){
     char* filename = gtk_entry_get_text(GTK_ENTRY(md_mkdir.inp_filename));
     strncpy(md_text_editor.filename, filename, 64);
+    gtk_widget_hide(md_mkdir.window);
     gtk_widget_show_all(md_text_editor.window);
 }
 
@@ -139,10 +140,10 @@ int write_file(){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        show_dialog_text("File Create Success");
+        inform_dialog("File Create Success");
         update_file_list(res);
     }else{
-        show_dialog_text("File Create Failed");
+        error_dialog("File Create Failed");
     }
     strcpy(md_text_editor.filename, "");
     strcpy(md_mkdir.inp_filename, "");
@@ -177,11 +178,12 @@ int make_dir(){
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
         printf("mk: %s [%d] success!\n", cwd, res.data.file_len);
-        show_dialog_text("Directory Create Success");
+        inform_dialog("Directory Create Success");
         update_file_list(res);
     }else{
-        show_dialog_text("Directory Create Failed");
+        error_dialog("Directory Create Failed");
     }
+    gtk_widget_hide(md_mkdir.window);
 }
 
 
@@ -200,11 +202,12 @@ int rename_file(){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        show_dialog_text("Rename Success");
+        inform_dialog("Rename Success");
         update_file_list(res);
     }else{
-        show_dialog_text("Rename Failed");
+        error_dialog("Rename Failed");
     }
+    gtk_widget_hide(md_mkdir.window);
 }
 
 int remove_file(char* filename){
@@ -218,10 +221,10 @@ int remove_file(char* filename){
     
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        show_dialog_text("Remove File Success");
+        inform_dialog("Remove File Success");
         update_file_list(res);
     }else{
-        show_dialog_text("Remove File Failed");
+        error_dialog("Remove File Failed");
     }
     gtk_widget_hide(ctxm_dir_option.menu);
 }
@@ -236,10 +239,10 @@ int remove_dir(char* filename){
     
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-        show_dialog_text("Remove Directory Success");
+        inform_dialog("Remove Directory Success");
         update_file_list(res);
     }else{
-        show_dialog_text("Remove Directory Failed");
+        error_dialog("Remove Directory Failed");
     }
     gtk_widget_hide(ctxm_dir_option.menu);
 }
@@ -271,7 +274,7 @@ int move_file(){
     gtk_style_class_toggle(label_data[selected_index], "cut", TRUE);
 
     gtk_label_set_text(GTK_LABEL(copied_file_label), text);
-    show_dialog_text("File Selected");
+    inform_dialog("File Selected");
 }
 
 int copy_file(){
@@ -299,7 +302,7 @@ int copy_file(){
 
     copy_mode = 0;
     gtk_label_set_text(GTK_LABEL(copied_file_label), text);
-    show_dialog_text("File Copied");
+    inform_dialog("File Copied");
 }
 
 int paste_file(){
@@ -327,7 +330,7 @@ int paste_file(){
     
     // 폴더 복사할 경우, 해당 폴더를 폴더 내에 복사하는 상황 방지 
     if(copied_file.type ==4 && strncmp(source, dest, strlen(source)) == 0){
-        printf("same directory");
+        error_dialog("Invalid Paste");
         return 1;
     }
     
@@ -357,10 +360,10 @@ int paste_file(){
             copied_file.size = -1;
             copied_file.type = -1;
         }
-        show_dialog_text("Paste Success Success");
+        inform_dialog("Paste Success Success");
         update_file_list(res);
     }else{
-        show_dialog_text("Paste Failed");
+        error_dialog("Paste Failed");
     }
     copy_mode = -1;
 }
@@ -379,10 +382,10 @@ int execute_file(char* filename){
 
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
-         show_dialog_text("File Execute Success");
+         inform_dialog("File Execute Success");
         // update_file_list(res);
     }else{
-         show_dialog_text("File Execute Failed");
+         error_dialog("File Execute Failed");
     }
 }
 

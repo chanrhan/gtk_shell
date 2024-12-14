@@ -11,6 +11,8 @@ int move_full_directory(char* path);
 
 int show_process();
 
+void toggle_display_mode();
+
 
 #endif
 

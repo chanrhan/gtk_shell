@@ -7,6 +7,7 @@ file_info_t file_list[MAX_FILE_LIST_SIZE];
 GtkWidget* label_data[MAX_FILE_LIST_SIZE];
 GtkWidget* dir_text;
 
+GtkWidget* btn_ps;
 file_info_t copied_file;
 GtkWidget* copied_file_label;
 GtkLabel* dialog_label;
@@ -23,7 +24,7 @@ int edit_mode = 0;
 int copy_mode = -1;
 int file_list_size = 0;
 
-int display_mode = DISPLAY_FILE;
+int display_mode = FILE_DISPLAY_MODE;
 
 void init(){
     

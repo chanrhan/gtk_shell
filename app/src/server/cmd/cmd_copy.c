@@ -10,14 +10,6 @@ int cmd_copy(req_msg_t req, res_msg_t* res){
         perror("access: copy file");
         return 1;
     }
-    // if(append_path(req.cwd, req.args[0], source, 0)){
-    //     perror("append path: source");
-    //     return 1;
-    // }
-    // if(append_path(req.cwd, req.args[1], dest, 1)){
-    //     perror("append path: dest");
-    //     return 1;
-    // }
     printf("%s -> %s\n", source, dest);
 
     // 파일 존재하는지 검사 

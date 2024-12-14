@@ -13,6 +13,7 @@ DECLARE_GTK_CALLBACK(open_file_detail);
 
 DECLARE_GTK_CALLBACK(dir_info_open);
 DECLARE_GTK_CALLBACK(file_info_open);
+DECLARE_GTK_CALLBACK(change_display_mode);
 
 // modal
 DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
@@ -48,6 +49,10 @@ int gtk_exit(GtkWidget* widget, gpointer data);
 gboolean on_enter_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data);
 
 gboolean on_leave_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data);
+
+gboolean on_enter_notify_path_tok(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data);
+
+gboolean on_leave_notify_path_tok(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data);
 
 void on_popup_close(GtkWidget *widget, gpointer user_data);
 

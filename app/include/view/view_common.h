@@ -23,6 +23,7 @@ extern int edit_mode; // file info mode
 
 extern int copy_mode; // copy or move
 
+extern GtkWidget* btn_ps;
 extern GtkWidget* copied_file_label;
 extern GtkLabel* dialog_label;
 extern GtkWidget* search_inp;

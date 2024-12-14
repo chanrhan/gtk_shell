@@ -22,7 +22,7 @@ int send_to_server(req_msg_t* req)
         perror("msgsnd");
         exit(1);
     }
-    printf("sended");
+    printf("sended\n");
 
     return 0;
 }
