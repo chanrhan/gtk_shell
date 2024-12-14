@@ -20,7 +20,7 @@
 #define CMD_CP 22 // 복사 
 #define CMD_RM_DIR 23 // 폴더 삭제 
 #define CMD_RM_FILE 24 // 파일 삭제
-#define CMD_CH_FILE 25 // 파일 수정 
+#define CMD_CH_PERM 25 // 파일 권한 수정 
 #define CMD_CAT 26
 #define CMD_OPEN_FILE 27 // 파일 정보 열기
 

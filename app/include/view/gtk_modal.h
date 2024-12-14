@@ -21,16 +21,19 @@ typedef struct gtk_modal_file_detail
 {
     int type;
     GtkWidget* window;
-    GtkWidget* inp_filename;
-    GtkWidget* check_box_symbol;
-    GtkWidget* inp_error_label;
+    GtkWidget* filename_label;
+    GtkWidget* mtime_label;
+    GtkWidget* birthtimetime_label;
+    GtkWidget* size_label;
     GtkWidget* perm_check_box[9];
     GtkWidget* btn_close;
+    GtkWidget* btn_submit;
 } gtk_modal_file_detail;
 
 typedef struct gtk_context_menu_file_option{
     GtkMenu* menu;
     GtkWidget* item_rename;
+    GtkWidget* item_detail;
     GtkWidget* item_modify;
     GtkWidget* item_move;
     GtkWidget* item_remove;
@@ -42,6 +45,7 @@ typedef struct gtk_context_menu_file_option{
 typedef struct gtk_context_menu_dir_option{
     GtkMenu* menu;
     GtkWidget* item_rename;
+    GtkWidget* item_detail;
     GtkWidget* item_move;
     GtkWidget* item_remove;
     GtkWidget* item_copy;

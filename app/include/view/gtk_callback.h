@@ -9,6 +9,7 @@
 DECLARE_GTK_CALLBACK(quit);
 DECLARE_GTK_CALLBACK(mkdir_popup_open);
 DECLARE_GTK_CALLBACK(open_mkfile_modal);
+DECLARE_GTK_CALLBACK(open_file_detail);
 
 DECLARE_GTK_CALLBACK(dir_info_open);
 DECLARE_GTK_CALLBACK(file_info_open);
@@ -17,6 +18,7 @@ DECLARE_GTK_CALLBACK(file_info_open);
 DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
 DECLARE_GTK_CALLBACK(mkdir_popup_submit);
 DECLARE_GTK_CALLBACK(submit_mkfile);
+DECLARE_GTK_CALLBACK(submit_change_perm);
 
 
 DECLARE_GTK_CALLBACK(mvdir);

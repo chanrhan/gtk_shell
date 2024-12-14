@@ -37,10 +37,11 @@ void init_file_menu_context(GtkWidget* parent){
     int MAX_WIDTH = 600;
     int MAX_HEIGHT = 400;
     // add_btn
-    GtkWidget* menu, *item_cp, *item_rm, *item_rename, *item_mv, *item_md, *item_ex, *item_mklink;
+    GtkWidget* menu, *item_cp, *item_detail, *item_rm, *item_rename, *item_mv, *item_md, *item_ex, *item_mklink;
     menu = gtk_menu_new();
     
     item_cp = gtk_menu_item_new_with_label("Copy");
+    item_detail = gtk_menu_item_new_with_label("Detail..");
     item_rm= gtk_menu_item_new_with_label("Remove");
     item_rename = gtk_menu_item_new_with_label("Rename");
     item_mv = gtk_menu_item_new_with_label("Cut");
@@ -49,6 +50,7 @@ void init_file_menu_context(GtkWidget* parent){
     item_ex = gtk_menu_item_new_with_label("Execute");
 
     g_signal_connect(item_cp, "activate", G_CALLBACK(g_callback_file_copy), NULL);
+    g_signal_connect(item_detail, "activate", G_CALLBACK(g_callback_open_file_detail), NULL);
     g_signal_connect(item_rm, "activate", G_CALLBACK(g_callback_file_remove), NULL);
     g_signal_connect(item_rename, "activate", G_CALLBACK(g_callback_file_rename), NULL);
     g_signal_connect(item_mv, "activate", G_CALLBACK(g_callback_file_move), NULL);
@@ -57,6 +59,7 @@ void init_file_menu_context(GtkWidget* parent){
     g_signal_connect(item_mklink, "activate", G_CALLBACK(g_callback_file_mklink), NULL);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_cp);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_detail);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_mv);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_rename);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_md);
@@ -68,6 +71,7 @@ void init_file_menu_context(GtkWidget* parent){
 
     ctxm_file_option.menu = menu;
     ctxm_file_option.item_copy = item_cp;
+    ctxm_file_option.item_detail = item_detail;
     ctxm_file_option.item_move = item_mv;
     ctxm_file_option.item_rename = item_rename;
     ctxm_file_option.item_remove = item_rm;
@@ -80,20 +84,23 @@ void init_dir_menu_context(GtkWidget* parent){
     int MAX_WIDTH = 600;
     int MAX_HEIGHT = 400;
     // add_btn
-    GtkWidget* menu, *item_cp, *item_rm, *item_rename, *item_mv;
+    GtkWidget* menu, *item_cp, *item_detail, *item_rm, *item_rename, *item_mv;
     menu = gtk_menu_new();
 
     item_cp = gtk_menu_item_new_with_label("Copy");
+    item_detail = gtk_menu_item_new_with_label("Detail..");
     item_rm= gtk_menu_item_new_with_label("Remove");
     item_rename = gtk_menu_item_new_with_label("Rename");
     item_mv = gtk_menu_item_new_with_label("Move");
 
     g_signal_connect(item_cp, "activate", G_CALLBACK(g_callback_file_copy), NULL);
+    g_signal_connect(item_detail, "activate", G_CALLBACK(g_callback_open_file_detail), NULL);
     g_signal_connect(item_rm, "activate", G_CALLBACK(g_callback_dir_remove), NULL);
     g_signal_connect(item_rename, "activate", G_CALLBACK(g_callback_file_rename), NULL);
     g_signal_connect(item_mv, "activate", G_CALLBACK(g_callback_file_move), NULL);
 
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_cp);
+    gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_detail);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_rm);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_rename);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item_mv);
@@ -102,6 +109,7 @@ void init_dir_menu_context(GtkWidget* parent){
 
     ctxm_dir_option.menu = menu;
     ctxm_dir_option.item_copy = item_cp;
+    ctxm_dir_option.item_detail = item_detail;
     ctxm_dir_option.item_move = item_mv;
     ctxm_dir_option.item_rename = item_rename;
     ctxm_dir_option.item_remove = item_rm;
@@ -243,34 +251,35 @@ void init_modal_file_detail(GtkWidget* parent){
     gtk_window_set_modal(GTK_WINDOW(md_file_detail.window), TRUE);
 
     // layout (600, 400)
-    GtkWidget* vbox, *func_vbox, *ctrl_hbox;
+    GtkWidget* vbox, *main_vbox, *ctrl_hbox;
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(md_file_detail.window), vbox);
 
-    func_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(func_vbox, MAX_WIDTH, 350);
+    main_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_size_request(main_vbox, MAX_WIDTH, 350);
 
     ctrl_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_widget_set_size_request(ctrl_hbox, MAX_WIDTH, 50);
 
-    gtk_box_pack_start(GTK_BOX(vbox), func_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(vbox), main_vbox, TRUE, TRUE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), ctrl_hbox, TRUE, TRUE, 0);
 
-    // func_box (600, 350)
-    GtkWidget* info_hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    gtk_widget_set_size_request(info_hbox, 600, 45);
-    gtk_box_pack_start(GTK_BOX(func_vbox), info_hbox, TRUE, TRUE, 0);
+    // info_vbox (600, 350)
+    GtkWidget* info_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_widget_set_size_request(info_vbox, 600, 45);
+    gtk_box_pack_start(GTK_BOX(main_vbox), info_vbox, TRUE, TRUE, 0);
     GtkWidget* perm_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_widget_set_size_request(perm_vbox, 600, 255);
-    gtk_box_pack_start(GTK_BOX(func_vbox), perm_vbox, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(main_vbox), perm_vbox, TRUE, TRUE, 0);
 
-    // setting_hbox (600, 45)
-    GtkWidget* type_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(type_vbox, 200, 45);
-    gtk_box_pack_start(GTK_BOX(info_hbox), type_vbox, TRUE, TRUE, 0);
-    GtkWidget* inp_vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-    gtk_widget_set_size_request(inp_vbox, 400, 45);
-    gtk_box_pack_start(GTK_BOX(info_hbox), inp_vbox, TRUE, TRUE, 0);
+    md_file_detail.filename_label = gtk_label_new("");
+    md_file_detail.mtime_label = gtk_label_new("");
+    md_file_detail.birthtimetime_label = gtk_label_new("");
+    md_file_detail.size_label = gtk_label_new("");
+    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.filename_label, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.birthtimetime_label, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.mtime_label, TRUE, TRUE, 0);
+    gtk_box_pack_start(GTK_BOX(info_vbox), md_file_detail.size_label, TRUE, TRUE, 0);
     
     // perm_hbox (600, 225)
     GtkWidget* perm_label =  gtk_label_new("File Access Permission");
@@ -315,9 +324,12 @@ void init_modal_file_detail(GtkWidget* parent){
     gtk_box_pack_start(GTK_BOX(o_vbox), md_file_detail.perm_check_box[0], TRUE, TRUE, 0);
 
     // ctrl_box
-    md_file_detail.btn_close = gtk_button_new_with_label("Close");
+    md_file_detail.btn_close = gtk_button_new_with_label("Cancel");
+    md_file_detail.btn_submit = gtk_button_new_with_label("Save");
     g_signal_connect(md_file_detail.btn_close, "clicked", G_CALLBACK(on_popup_close), md_file_detail.window);
+    g_signal_connect(md_file_detail.btn_submit, "clicked", G_CALLBACK(g_callback_submit_change_perm), NULL);
 
+    gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_file_detail.btn_submit, TRUE, TRUE, 5);
     gtk_box_pack_start(GTK_BOX(ctrl_hbox), md_file_detail.btn_close, TRUE, TRUE, 5);
 }
 

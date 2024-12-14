@@ -15,7 +15,9 @@ cmd_t cmd_list[] = {
     {CMD_PS, cmd_ps},
     {CMD_KILL, cmd_kill},
     {CMD_SEARCH, cmd_search},
-    {CMD_CAT, cmd_cat}
+    {CMD_CAT, cmd_cat},
+    {CMD_OPEN_FILE, cmd_open_detail},
+    {CMD_CH_PERM, cmd_chmod}
 };
 
 int cmd_list_size = sizeof(cmd_list) / sizeof(cmd_t);

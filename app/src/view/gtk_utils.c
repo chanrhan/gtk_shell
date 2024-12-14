@@ -4,6 +4,75 @@
 #include "ipc_view.h"
 #include "view_func.h"
 
+void set_perm(GtkWidget* widget[9], int mode){
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[0]), (mode & 0001) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[1]), (mode & 0002) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[2]), (mode & 0004) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[3]), (mode & 0010) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[4]), (mode & 0020) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[5]), (mode & 0040) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[6]), (mode & 0100) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[7]), (mode & 0200) ? TRUE : FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(widget[8]), (mode & 0400) ? TRUE : FALSE);
+}
+
+int get_perm(GtkWidget* widget[9]){
+    int perm = 0;
+    for(int i=0;i<9;++i){
+        if(gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget[i]))){
+            perm |= (1 << i);
+        }
+    }
+    return perm;
+}
+
+int change_perm(){
+    char* filename = gtk_label_get_text(GTK_LABEL(md_file_detail.filename_label));
+    int perm = get_perm(md_file_detail.perm_check_box);
+    
+
+    req_msg_t req;
+    res_msg_t res;
+
+    req.cmd = CMD_CH_PERM;
+    strncpy(req.args[0], filename, MAX_ARGV_SIZE);
+    sprintf(req.args[1], "%o", perm);
+    printf("change_perm:%s\n", req.args[1]);
+
+    int len = send_wait_rcv(&req, &res);
+    if(len >= 0){
+        show_dialog_text("Permission Update Success");
+    }else{
+        show_dialog_text("Permission Update Failed");
+    }
+    gtk_widget_hide(md_file_detail.window);
+}
+
+int open_file_detail(){
+    printf("open file\n");
+    req_msg_t req;
+    res_msg_t res;
+
+    req.cmd = CMD_OPEN_FILE;
+    strncpy(req.args[0], file_list[selected_index].name, MAX_ARGV_SIZE);
+
+    int len = send_wait_rcv(&req, &res);
+    if(len >= 0){
+        gtk_widget_show_all(md_file_detail.window);
+
+        file_info_t* file = &res.data.files[0];
+        gtk_label_set_text(GTK_LABEL(md_file_detail.filename_label), file_list[selected_index].name);
+        gtk_label_set_text(GTK_LABEL(md_file_detail.birthtimetime_label), file->birthtime);
+        gtk_label_set_text(GTK_LABEL(md_file_detail.mtime_label), file->mtime);
+        char text[8];
+        sprintf(text, "%d", file->size);
+        gtk_label_set_text(GTK_LABEL(md_file_detail.size_label), text);
+
+        int mode = file->perm;
+        set_perm(md_file_detail.perm_check_box, mode);
+    }
+}
+
 int submit_file_info(){
     switch (edit_mode)
     {
@@ -29,6 +98,22 @@ int open_text_editor(){
     char* filename = gtk_entry_get_text(GTK_ENTRY(md_mkdir.inp_filename));
     strncpy(md_text_editor.filename, filename, 64);
     gtk_widget_show_all(md_text_editor.window);
+}
+
+int read_file(char* filename){
+    strcpy(md_text_editor.filename, filename);
+    req_msg_t req;
+    res_msg_t res;
+
+    req.cmd = CMD_CAT;
+    strncpy(req.args[0], filename, MAX_PATH_LEN);
+
+    int len = send_wait_rcv(&req, &res);
+    if(len >= 0){
+        gtk_widget_show_all(md_text_editor.window);
+        GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(md_text_editor.textview));
+        gtk_text_buffer_set_text(buffer, res.text_buf, -1);
+    }
 }
 
 int write_file(){
@@ -99,21 +184,7 @@ int make_dir(){
     }
 }
 
-int read_file(char* filename){
-    strcpy(md_text_editor.filename, filename);
-    req_msg_t req;
-    res_msg_t res;
 
-    req.cmd = CMD_CAT;
-    strncpy(req.args[0], filename, MAX_PATH_LEN);
-
-    int len = send_wait_rcv(&req, &res);
-    if(len >= 0){
-        gtk_widget_show_all(md_text_editor.window);
-        GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(md_text_editor.textview));
-        gtk_text_buffer_set_text(buffer, res.text_buf, -1);
-    }
-}
 
 int rename_file(){
     req_msg_t req;

@@ -26,9 +26,10 @@ DECLARE_CMDFUNC(ps); // MK_PS
 DECLARE_CMDFUNC(kill); // MK_KILL
 
 DECLARE_CMDFUNC(search); // SEARCH
-DECLARE_CMDFUNC(cat); // SEARCH
+DECLARE_CMDFUNC(cat); // 
 
-DECLARE_CMDFUNC(open_detail); // SEARCH
+DECLARE_CMDFUNC(open_detail); // 
+DECLARE_CMDFUNC(chmod); // 
 
 
 

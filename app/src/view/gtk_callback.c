@@ -62,13 +62,13 @@ int g_callback_item_clicked(GtkWidget* widget, GdkEventButton *event, gpointer d
         }
         gtk_menu_popup_at_pointer(target_menu_context, (GdkEvent *)event);
     }else{
-         printf("111:%s\n", filename);
+        //  printf("111:%s\n", filename);
         if(filename[0] != '\0'){
-         printf("222\n");
+        //  printf("222\n");
             switch (file_list[index].type)
             {
             case 4:
-         printf("333\n");
+        //  printf("333\n");
                 move_directory(filename);
                 break;
             case 8:
@@ -107,6 +107,14 @@ int g_callback_file_info_open(GtkWidget* widget, gpointer data){
     edit_mode = EDIT_MODE_FILE;
     // selected_index = get_clicked_index(widget);
     gtk_widget_show_all(md_mkdir.window);
+}
+
+int g_callback_open_file_detail(GtkWidget* widget, gpointer data){
+    open_file_detail();
+}
+
+int g_callback_submit_change_perm(GtkWidget* widget, gpointer data){
+    change_perm();
 }
 
 int g_callback_dir_info_open(GtkWidget* widget, gpointer data){

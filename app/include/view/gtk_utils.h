@@ -33,4 +33,8 @@ int execute_file(char* filename);
 
 int link_file();
 
+int open_file_detail();
+
+int change_perm();
+
 #endif
