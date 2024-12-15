@@ -11,10 +11,11 @@ INCLUDE_DIR = include
 # Subdirectories
 VIEW_DIR = $(SRC_DIR)/view
 SERVER_DIR = $(SRC_DIR)/server
+CMD_DIR = $(SERVER_DIR)/cmd
 
 # Source files
 VIEW_SRCS = $(wildcard $(VIEW_DIR)/*.c)
-SERVER_SRCS = $(wildcard $(SERVER_DIR)/*.c)
+SERVER_SRCS = $(wildcard $(SERVER_DIR)/*.c) $(wildcard $(CMD_DIR)/*.c)
 IPC_SRCS = $(SRC_DIR)/ipc.c
 
 # Object files
@@ -41,6 +42,7 @@ check_dependencies:
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)/view
 	mkdir -p $(OBJ_DIR)/server
+	mkdir -p $(OBJ_DIR)/server/cmd
 
 # Build rules for object files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)

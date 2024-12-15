@@ -1,54 +1,168 @@
-#custom_button {
-    color: #e60c0c;           /* 흰색 텍스트 */
+.container{
+    background: rgb(124, 124, 124);
 }
 
-#header_box{
-    background-color: rgb(64, 0, 255);
+.header{
+    /* background-color: #4781ff; */
+    padding: 5px;
 }
 
-#body_box{
-    background-color: rgb(0, 255, 17);
+.body{
+    /* background-color: rgb(0, 255, 17); */
 }
 
-#side_box{
-    background-color: rgb(210, 195, 255);
+.footer{
+    /* background-color: #4781ff; */
 }
 
-#content_box{
-    background-color: rgb(121, 81, 240);
+.header .btn_mkdir{
+
 }
 
-#dir_box{
-    background-color: rgb(245, 128, 216);
+button{
+    font-size: 16px;
+    /* border-radius:10px; */
+     background:#bbbbbb; 
+     color:#fff; 
+     /* border: 1px solid rgb(124, 124, 124); */
+     /* font-weight:300; */
 }
 
-#dir_text{
+/* button:hover{
+    background:#2b65e2; 
+} */
+
+.header .btn_mkfile{
+
+}
+
+.header .btn_ps{
+
+}
+
+.process_mode{
+    background: #2b65e2;
+}
+
+.header .btn_quit{
+
+}
+
+.body .side_box{
+    /* background-color: #4781ff; */
+}
+
+.body .side_box .btn_mvdir:first-child{
+    margin-top: 65px;
+}
+
+.body .side_box .btn_mvdir{
+    background: rgb(180, 180, 180);
+    color: black;
+    margin: 5px 2px 5px 2px;
+    font-size: 16px;
+    min-height: 50px;
+}
+
+.body .side_box .btn_mvdir:hover{
+    background: rgb(211, 211, 211);
+}
+
+.body .content_box{
+    /* background-color: rgb(121, 81, 240); */
+}
+
+.body .content_box .dir_cont{
+    background-color: rgb(189, 189, 189);
+}
+
+.body .content_box .dir_cont .path_tok{
     color: black;
     font-size: 20px;
 }
 
-#search_box{
-    background-color: rgb(245, 128, 132);
+.body .content_box .dir_cont .path_tok:hover{
+    color: rgb(211, 240, 255);
 }
 
-#list_box{
-    background-color: rgb(214, 255, 170);
+.body .content_box .search_cont{
+    /* background-color: rgb(245, 128, 132); */
 }
 
-#file_info_text{
-    margin-left: 80px;
-    color: black;
+.body .content_box .search_cont .inp_search{
+    
+}
+
+.body .content_box .search_cont .btn_search{
+
+}
+
+.body .content_box .list_header{
+    background-color: rgb(211, 240, 255);
     font-size: 26px;
+    font-family: Monospace;
 }
 
-#file_info_text:hover{
-    background-color: #e60c0c;
+.body .content_box .list_box{
+    background-color: rgb(255, 255, 254);
 }
 
-#footer_box{
-    background-color: rgb(255, 0, 0);
+.body .content_box .list_box .file_item{
+    padding: 20px 5px 20px 5px;
+    font-size: 26px;
+    color: rgb(0, 0, 0);
 }
 
-#clipboard_box{
-    background-color: rgb(255, 141, 141);
+.body .content_box .list_box .file_item:hover{
+    background-color: #7cbce9;
+}
+
+.body .content_box .list_box .file_item .file_info_text{
+    font-family: Monospace;
+}
+
+.cut{
+    color: rgb(172, 172, 172);
+    /* background-color: #63fad4; */
+}
+
+.find{
+    color: rgb(255, 0, 0);
+    /* background-color: #63fad4; */
+}
+
+.file{
+    color: rgb(0, 13, 255);
+}
+
+.footer .clipboard_cont{
+    background-color: rgb(172, 172, 172);
+}
+
+.footer .clipboard_cont .clip_title{
+    font-size: 20px;
+    color: black;
+}
+
+.footer .clipboard_cont .clipboard_text{
+    transition: all 0.25s ease-in-out;
+    font-size: 28px;
+}
+
+.inform{
+    background-color: rgb(111, 169, 241);
+    transition: all 0.5s ease-in-out;
+}
+
+.error{
+    background-color: rgb(246, 109, 109);
+    transition: all 0.5s ease-in-out;
+}
+
+.copied{
+    background-color: rgb(250, 244, 127);
+}
+
+.footer .msg_text{
+    font-size: 28px;
 }

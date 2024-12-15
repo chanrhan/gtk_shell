@@ -1,6 +1,28 @@
-#include "server_func.h"
+#include "cmd.h"
 
-void get_ls(char *pwd, msg_data_t *data)
+cmd_t cmd_list[] = {
+    {CMD_LS, cmd_ls},
+    {CMD_LS_FULL, cmd_ls_full},
+    {CMD_MK_DIR, cmd_mkdir}, 
+    {CMD_MK_FILE, cmd_mkfile},
+    {CMD_MK_LN, cmd_mkln},
+    {CMD_RENAME, cmd_rename},
+    {CMD_RM_DIR, cmd_rmdir},
+    {CMD_RM_FILE, cmd_rmfile},
+    {CMD_MV, cmd_move}, 
+    {CMD_CP, cmd_copy},
+    {CMD_EXEC, cmd_execute},
+    {CMD_PS, cmd_ps},
+    {CMD_KILL, cmd_kill},
+    {CMD_SEARCH, cmd_search},
+    {CMD_CAT, cmd_cat},
+    {CMD_OPEN_FILE, cmd_open_detail},
+    {CMD_CH_PERM, cmd_chmod}
+};
+
+int cmd_list_size = sizeof(cmd_list) / sizeof(cmd_t);
+
+void get_file_list(char *pwd, msg_data_t *data)
 {
     DIR *dp;
     struct dirent *dent;
@@ -9,8 +31,10 @@ void get_ls(char *pwd, msg_data_t *data)
     if (dp == NULL)
     {
         perror("opendir");
-        exit(1);
+        return 1;
     }
+
+    char path[MAX_PATH_LEN];
 
     int i = 0;
     while ((dent = readdir(dp)))
@@ -19,10 +43,11 @@ void get_ls(char *pwd, msg_data_t *data)
         {
             continue;
         }
-
+        snprintf(path, MAX_PATH_LEN, "%s/%s", pwd, dent->d_name);
         // stat 명령어를 통해 파일의 상세 정보 가져와서 출력
         struct stat statbuf;
-        stat(dent->d_name, &statbuf);
+        stat(path, &statbuf);
+        // printf("[%s] a:%u,s:%u,m:%u", statbuf.st_atimespec);
 
         unsigned int mode = statbuf.st_mode;
 
@@ -54,40 +79,43 @@ void get_ls(char *pwd, msg_data_t *data)
 
         data->files[i].type = (int)dent->d_type;
         strncpy(data->files[i].name, dent->d_name, 16);
-        strncpy(data->files[i].mtime, gettime_str(statbuf.st_mtime), 9);
+        strncpy(data->files[i].mtime, gettime_str(statbuf.st_mtime), MTIME_LEN);
         data->files[i].size = statbuf.st_size;
+        
 
         ++i;
-        if (i >= FILE_DISPLAY_LIMIT - 1)
+        if (i >= MAX_FILE_LIST_SIZE - 1)
         {
             break;
         }
     }
     data->file_len = i;
-    // printf("file_len: %d\n", data->file_len);
+    printf("file_len: %d\n", data->file_len);
 
     closedir(dp); // 사용 끝났으니 닫기
 }
 
-int validate_path(char *org_cwd, char *append, char* cwd, int mode)
+int append_path(char *org_cwd, char *append, char* cwd, int mode)
 {
+    // printf("%s, %s, %s\n", org_cwd, append, cwd);
     if (append[0] != '\0')
     {
         if (strcmp(append, "..") == 0)
         {
             // 최상위 ROOT 디렉토리를 벗어나면 
-            if(strcmp(org_cwd, ROOT_DIR) == 0 || strncmp(ROOT_DIR, org_cwd, strlen(ROOT_DIR)) != 0){
-                strncpy(cwd, org_cwd, CWD_LEN);
+            if(strcmp(org_cwd, ROOT_DIR) == 0 || strncmp(org_cwd, ROOT_DIR, strlen(ROOT_DIR)) != 0){
+                strncpy(cwd, org_cwd, MAX_PATH_LEN);
                 return 1;
             }
-            // printf("cwd:%s\n", cwd);
+            printf("cwd:%s\n", cwd);
+            // 경로의 마지막 디렉토리를 잘라내어 상위 경로로 이동 
             char* last_slash = strrchr(cwd, '/');
             *last_slash = '\0';
-            // printf("cwd:%s\n", cwd);
+            printf("cwd:%s\n", cwd);
         }
         else
         {
-            snprintf(cwd, CWD_LEN, "%s/%s", org_cwd, append);
+            snprintf(cwd, MAX_PATH_LEN, "%s/%s", org_cwd, append);
         }
         if (mode == 0 && access(cwd, 0) == -1)
         {
@@ -96,67 +124,21 @@ int validate_path(char *org_cwd, char *append, char* cwd, int mode)
             return 1;
         }
     }else{
+
         if (mode == 0 && access(org_cwd, 0) == -1)
         {
             perror("access");
             return 1;
         }
-        strncpy(cwd, org_cwd, CWD_LEN);
+        strncpy(cwd, org_cwd, MAX_PATH_LEN);
     }
     
     return 0;
 }
 
-int cmd_ls(req_msg_t req, res_msg_t *res)
-{
-    if(validate_path(req.cwd, req.args[0], &res->cwd, 0) != 0){
-        printf("access failed!");
-        return 1;
-    }
-    get_ls(res->cwd, &res->data);
 
-    return 0;
-}
 
-int cmd_mkdir(req_msg_t req, res_msg_t *res)
-{
-    char cwd[CWD_LEN];
-    printf("cwd:%s,mk:%s,mode:%d\n", req.cwd, req.args[0], (mode_t)atoi(req.args[1]));
-    if(validate_path(req.cwd, req.args[0], &cwd, 1) != 0){
-        perror("validat_path");
-        return 1;
-    }
 
-    printf("validate cwd:%s\n", cwd);
-    int ret = mkdir(cwd, atoi(req.args[1]));
-    if(ret != 0){
-        perror("mkdir: ");
-        // char* err = strerror(errno);
-        // printf("err:%s|\n",err);
-    }
-    get_ls(req.cwd, &res->data);
-    return ret;
-}
 
-int cmd_mk(req_msg_t req, res_msg_t *res){
-    
-}
 
-int cmd_rmdir(req_msg_t req, res_msg_t *res)
-{
-    int ret = rmdir(req.args[0]);
-    get_ls(req.cwd, &res->data);
-    return ret;
-}
 
-int cmd_rename(req_msg_t req, res_msg_t *res)
-{
-    char* cwd;
-    if(validate_path(req.cwd, req.args[0], cwd, 0) != 0){
-        perror("validat_path");
-        return 1;
-    }
-    int ret = rename(cwd, req.args[1]);
-    get_ls(req.cwd, &res->data);
-    return ret;
-}

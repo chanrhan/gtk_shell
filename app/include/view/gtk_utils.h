@@ -3,20 +3,38 @@
 
 #include "view_common.h"
 
-#define DECLARE_GTK_CALLBACK(str) int g_callback_##str(GtkWidget* widget, gpointer data)
+int search_file();
 
-DECLARE_GTK_CALLBACK(mvdir);
-DECLARE_GTK_CALLBACK(quit);
-DECLARE_GTK_CALLBACK(mkdir_popup_open);
-DECLARE_GTK_CALLBACK(mkdir_popup_type_changed);
-DECLARE_GTK_CALLBACK(mkdir_popup_submit);
+int submit_file_info();
 
-int gtk_exit(GtkWidget* widget, gpointer data);
+int write_file();
 
-gboolean on_enter_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data);
+int open_text_editor();
 
-gboolean on_leave_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer user_data);
+int read_file();
 
-void on_popup_close(GtkWidget *widget, gpointer user_data);
+int make_dir();
+
+int make_file();
+
+int rename_file();
+
+int remove_dir(char* filename);
+
+int remove_file(char* filename);
+
+int move_file();
+
+int copy_file();
+
+int paste_file();
+
+int execute_file(char* filename);
+
+int link_file();
+
+int open_file_detail();
+
+int change_perm();
 
 #endif
