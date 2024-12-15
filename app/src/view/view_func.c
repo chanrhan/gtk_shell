@@ -48,7 +48,7 @@ int move_directory(char* path){
         strncpy(req.args[0], path, 16);
     }else{
         req.args[0][0] = '\0';
-    }
+    }   
     send_wait_rcv(&req, &res);
     if(res.status != STATUS_OK){
         return 1;

@@ -9,6 +9,9 @@ int cmd_rmdir(req_msg_t req, res_msg_t *res)
     }
 
     int ret = rmdir(source);
+    if(ret != 0){
+        return 1;
+    }
     get_file_list(req.cwd, &res->data);
     return ret;
 }

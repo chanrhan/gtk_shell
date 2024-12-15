@@ -31,7 +31,7 @@ void get_file_list(char *pwd, msg_data_t *data)
     if (dp == NULL)
     {
         perror("opendir");
-        exit(1);
+        return 1;
     }
 
     char path[MAX_PATH_LEN];

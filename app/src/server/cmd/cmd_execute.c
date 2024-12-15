@@ -7,7 +7,7 @@ int cmd_execute(req_msg_t req, res_msg_t* res){
         return 1;
     }
 	char argv[1][MAX_PATH_LEN];
-	snprintf(argv[0], MAX_PATH_LEN, ".%s", path);
+	snprintf(argv[0], MAX_PATH_LEN, "%s", path);
 	printf("execute: %s\n", argv[0]);
     pid_t pid;
 	

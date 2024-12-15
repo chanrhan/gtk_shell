@@ -38,8 +38,8 @@ gboolean on_enter_notify(GtkWidget *widget, GdkEventCrossing *event, gpointer da
         return TRUE;
     }
     if(selected_index != -1){
-        gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
     }
+        gtk_widget_set_state_flags(widget, GTK_STATE_FLAG_PRELIGHT, TRUE);
     return FALSE;
 }
 

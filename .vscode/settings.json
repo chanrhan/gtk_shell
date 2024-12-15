@@ -98,6 +98,7 @@
     "filesystem": "c",
     "memory": "c",
     "tuple": "c",
-    "type_traits": "c"
+    "type_traits": "c",
+    "util.h": "c"
   }
 }

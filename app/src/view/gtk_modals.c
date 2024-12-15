@@ -2,6 +2,13 @@
 #include "gtk_callback.h"
 #include "gtk_draw.h"
 
+gtk_modal_file_info md_mkdir;
+gtk_modal_file_detail md_file_detail;
+gtk_context_menu_file_option ctxm_file_option;
+gtk_context_menu_dir_option ctxm_dir_option;
+gtk_context_menu_bg_option ctxm_bg_option;
+gtk_modal_text_editor md_text_editor;
+
 void init_bg_menu_context(GtkWidget* parent){
     int MAX_WIDTH = 600;
     int MAX_HEIGHT = 400;

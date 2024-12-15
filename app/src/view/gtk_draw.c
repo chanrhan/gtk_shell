@@ -28,6 +28,12 @@ void update_file_list(res_msg_t res){
         
         // printf("(%d).\n", i);
         gtk_label_set_text(GTK_LABEL(label_data[i]), text);
+
+        if(file_list[i].type == 8){
+            gtk_style_class_toggle(label_data[i], "file", TRUE);
+        }else{
+            gtk_style_class_toggle(label_data[i], "file", FALSE);
+        }
         
         char tp[MAX_PATH_LEN];
         snprintf(tp, MAX_PATH_LEN, "%s/%s", cwd, file_list[i].name);

@@ -2,7 +2,6 @@
 #define VIEW_COMMON_H
 
 #include <gtk/gtk.h>
-#include "util.h"
 #include "view_types.h"
 #include "ipc.h"
 #include "ipc_types.h"

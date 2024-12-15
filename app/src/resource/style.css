@@ -131,6 +131,10 @@ button{
     /* background-color: #63fad4; */
 }
 
+.file{
+    color: rgb(0, 13, 255);
+}
+
 .footer .clipboard_cont{
     background-color: rgb(172, 172, 172);
 }
