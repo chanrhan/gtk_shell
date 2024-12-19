@@ -181,6 +181,7 @@ int make_dir(){
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
         printf("mk: %s [%d] success!\n", cwd, res.data.file_len);
+        gtk_entry_set_text(GTK_ENTRY(md_mkdir.inp_filename), "");
         inform_dialog("Directory Create Success");
         update_file_list(res);
     }else{
@@ -206,6 +207,7 @@ int rename_file(){
     int len = send_wait_rcv(&req, &res);
     if(len >= 0){
         inform_dialog("Rename Success");
+        gtk_entry_set_text(GTK_ENTRY(md_mkdir.inp_filename), "");
         update_file_list(res);
     }else{
         error_dialog("Rename Failed");

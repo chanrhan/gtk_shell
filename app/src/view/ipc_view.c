@@ -37,7 +37,6 @@ int wait_rcv(res_msg_t* res)
     }
     return len;
 }
-
 int send_wait_rcv(req_msg_t* req, res_msg_t* res){
     send_to_server(req);
     return wait_rcv(res);

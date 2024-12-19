@@ -10,8 +10,8 @@ void get_time_format(char* time, char* out){
     p = time + strlen(time);
     while(p > time){
         p -= 2;
-        buf[i] = (char*)malloc(2);
-        strncpy(buf[i], p, 2);
+        buf[i] = (char*)malloc(3);
+        strncpy(buf[i], p, 3);
         // printf("%s: %s\n",p, buf[i]);
         ++i;
         *p = '\0';

@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = gcc
-CFLAGS = -Iinclude -Iinclude/server -Iinclude/view
+CFLAGS = -Iinclude -Iinclude/server -Iinclude/view -fstack-protector -fno-stack-protector
 
 # Directories
 SRC_DIR = src
